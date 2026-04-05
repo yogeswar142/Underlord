@@ -114,6 +114,22 @@ def recalc_equipment_bonus(player: dict, items_dict: dict) -> dict:
     player["equipment_bonus"] = bonus
     return bonus
 
+async def add_news(text: str):
+    """
+    Logs an event text to the global news collection.
+    """
+    import db
+    from datetime import datetime, timezone
+    database = db.get_db()
+    await database.news.insert_one({
+        "text": text,
+        "timestamp": datetime.now(timezone.utc)
+    })
+    
+    # Optional: Keep only last 50 news to prevent runaway collection size
+    # To avoid performance hit on every insert, we can do it asynchronously or not at all.
+    # We will just let it grow or expire.
+
 
 # ── Item generation & drops ──────────────────────────────────────
 

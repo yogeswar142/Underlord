@@ -117,8 +117,29 @@ class InventoryCog(commands.Cog):
 
     # ── /equip ────────────────────────────────────────────────
 
+    async def equip_autocomplete(self, interaction: discord.Interaction, current: str):
+        try:
+            player = await db.get_player(str(interaction.user.id))
+            if not player or not player.get("items"): return []
+            
+            database = db.get_db()
+            items = await database.items.find({"_id": {"$in": player["items"]}}).to_list(None)
+            
+            choices = []
+            for itm in items:
+                # Don't show equipped items
+                if itm["_id"] in player["inventory"].values(): continue
+                name = f"{itm['name']} (+{itm['total_bonus']} {itm['stat_type']})"
+                if current.lower() in name.lower() or current.lower() in itm["_id"]:
+                    choices.append(app_commands.Choice(name=name[:100], value=itm["_id"][:8]))
+                    if len(choices) >= 25: break
+            return choices
+        except Exception:
+            return []
+
     @app_commands.command(name="equip", description="Equip an item from your inventory")
-    @app_commands.describe(item_id="The item ID (first 8 chars shown in /items)")
+    @app_commands.describe(item_id="The item to equip")
+    @app_commands.autocomplete(item_id=equip_autocomplete)
     async def equip(self, interaction: discord.Interaction, item_id: str):
         if not await utils.check_active(interaction):
             return

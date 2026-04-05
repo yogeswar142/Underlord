@@ -355,6 +355,14 @@ class BuildingsCog(commands.Cog):
                     )
                     await interaction.response.send_message(embed=embed, ephemeral=True)
                     return
+                else:
+                    embed = discord.Embed(
+                        title="🌾  Crops Ready",
+                        description="You have crops waiting to be harvested!\nUse `/farm collect` before starting a new cycle.",
+                        color=config.COLOR_WARNING,
+                    )
+                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                    return
 
             player["renewable"]["stamina"] -= stamina_cost
             player["cooldowns"]["farm_start"] = datetime.now(timezone.utc)
@@ -449,6 +457,23 @@ class BuildingsCog(commands.Cog):
 
     ship_group = app_commands.Group(name="ship", description="Ship trading")
 
+    async def ship_autocomplete(self, interaction: discord.Interaction, current: str):
+        try:
+            player = await db.get_player(str(interaction.user.id))
+            if not player or not player.get("fleet"): return []
+            
+            choices = []
+            for s in player["fleet"]:
+                if s.get("at_sea"): continue
+                if current.lower() in s["name"].lower():
+                    cap = config.SHIP_CAPACITY.get(s["type"], 100)
+                    desc = f"{s['name']} ({s['type'].title()} — Cap: {cap})"
+                    choices.append(app_commands.Choice(name=desc[:100], value=s["name"]))
+                    if len(choices) >= 25: break
+            return choices
+        except Exception:
+            return []
+
     @ship_group.command(name="send", description="Send a ship with cargo")
     @app_commands.describe(
         ship_name="Name of the ship to send",
@@ -458,6 +483,7 @@ class BuildingsCog(commands.Cog):
         app_commands.Choice(name="🌾 Grain", value="grain"),
         app_commands.Choice(name="🌿 Opium", value="opium"),
     ])
+    @app_commands.autocomplete(ship_name=ship_autocomplete)
     async def ship_send(
         self,
         interaction: discord.Interaction,
@@ -516,15 +542,24 @@ class BuildingsCog(commands.Cog):
                     return_at = f.get("returns_at")
                     if return_at and return_at.tzinfo is None:
                         return_at = return_at.replace(tzinfo=timezone.utc)
-                    if return_at and return_at > datetime.now(timezone.utc):
-                        rem = (return_at - datetime.now(timezone.utc)).total_seconds()
-                        embed = discord.Embed(
-                            title="⚓  Ship at Sea",
-                            description=f"**{target_ship['name']}** returns in **{utils.format_cooldown(rem)}**.",
-                            color=config.COLOR_WARNING,
-                        )
-                        await interaction.response.send_message(embed=embed, ephemeral=True)
-                        return
+                    if return_at:
+                        if return_at > datetime.now(timezone.utc):
+                            rem = (return_at - datetime.now(timezone.utc)).total_seconds()
+                            embed = discord.Embed(
+                                title="⚓  Ship at Sea",
+                                description=f"**{target_ship['name']}** returns in **{utils.format_cooldown(rem)}**.",
+                                color=config.COLOR_WARNING,
+                            )
+                            await interaction.response.send_message(embed=embed, ephemeral=True)
+                            return
+                        else:
+                            embed = discord.Embed(
+                                title="⚓  Ship Waiting",
+                                description=f"**{target_ship['name']}** has returned and is waiting to unload!\nUse `/ship collect` first.",
+                                color=config.COLOR_WARNING,
+                            )
+                            await interaction.response.send_message(embed=embed, ephemeral=True)
+                            return
 
             # Check cargo
             cargo_amount = player.get(cargo_type, 0)

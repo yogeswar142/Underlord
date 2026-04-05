@@ -1,0 +1,721 @@
+2026-04-05 20:42:13,590 | WARNING  | discord.client | PyNaCl is not installed, voice will NOT be supported
+2026-04-05 20:42:13,590 | WARNING  | discord.client | davey is not installed, voice will NOT be supported
+[2026-04-05 20:42:13] [WARNING ] discord.ext.commands.bot: Privileged message content intent is missing, commands may not work as expected.
+2026-04-05 20:42:13,592 | WARNING  | discord.ext.commands.bot | Privileged message content intent is missing, commands may not work as expected.
+[2026-04-05 20:42:13] [INFO    ] discord.client: logging in using static token
+2026-04-05 20:42:13,593 | INFO     | discord.client | logging in using static token
+[2026-04-05 20:42:15] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: f6440c8b727df94d9d7c38de271598ca).
+2026-04-05 20:42:15,877 | INFO     | discord.gateway | Shard ID None has connected to Gateway (Session ID: f6440c8b727df94d9d7c38de271598ca).
+2026-04-05 20:42:17,894 | INFO     | underworld | Connected to MongoDB.
+2026-04-05 20:42:17,899 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-05 20:42:17,900 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-05 20:42:17,901 | INFO     | apscheduler.scheduler | Added job "refill_tick" to job store "default"
+2026-04-05 20:42:17,902 | INFO     | apscheduler.scheduler | Added job "end_shift" to job store "default"
+2026-04-05 20:42:17,902 | INFO     | apscheduler.scheduler | Scheduler started
+2026-04-05 20:42:17,902 | INFO     | underworld | APScheduler started (tick + shift jobs).
+2026-04-05 20:42:17,911 | INFO     | underworld | ✅  Loaded cog: cogs.buildings
+2026-04-05 20:42:17,913 | INFO     | underworld | ✅  Loaded cog: cogs.crime
+2026-04-05 20:42:17,915 | INFO     | underworld | ✅  Loaded cog: cogs.daily
+2026-04-05 20:42:17,920 | INFO     | underworld | ✅  Loaded cog: cogs.gang
+2026-04-05 20:42:17,923 | INFO     | underworld | ✅  Loaded cog: cogs.help
+2026-04-05 20:42:17,925 | INFO     | underworld | ✅  Loaded cog: cogs.hospital
+2026-04-05 20:42:17,931 | INFO     | underworld | ✅  Loaded cog: cogs.inventory
+2026-04-05 20:42:17,934 | INFO     | underworld | ✅  Loaded cog: cogs.leaderboard
+2026-04-05 20:42:17,938 | INFO     | underworld | ✅  Loaded cog: cogs.market
+2026-04-05 20:42:17,940 | INFO     | underworld | ✅  Loaded cog: cogs.news
+2026-04-05 20:42:17,942 | INFO     | underworld | ✅  Loaded cog: cogs.prison
+2026-04-05 20:42:17,944 | INFO     | underworld | ✅  Loaded cog: cogs.profile
+2026-04-05 20:42:17,956 | INFO     | underworld | ✅  Loaded cog: cogs.pvp
+2026-04-05 20:42:17,958 | INFO     | underworld | ✅  Loaded cog: cogs.shop
+2026-04-05 20:42:17,960 | INFO     | underworld | ✅  Loaded cog: cogs.stats
+2026-04-05 20:42:17,961 | INFO     | underworld | ✅  Loaded cog: cogs.status
+2026-04-05 20:42:17,963 | INFO     | underworld | ✅  Loaded cog: cogs.upgrades
+2026-04-05 20:42:17,965 | INFO     | underworld | ✅  Loaded cog: cogs.vip
+2026-04-05 20:42:17,965 | INFO     | underworld | Cog loader finished: 18 loaded, 0 failed.
+2026-04-05 20:42:18,549 | INFO     | underworld | Synced 28 slash commands.
+2026-04-05 20:42:18,549 | INFO     | underworld | 🏴 Underworld Empire online as Underlord#6139 (ID: 1490257458961190922)
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/pvp.py", line 204, in attack
+    attacker, target = await self._validate_pvp(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/pvp.py", line 148, in _validate_pvp
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-04-05 20:43:15] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'attack'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/pvp.py", line 204, in attack
+    attacker, target = await self._validate_pvp(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/pvp.py", line 148, in _validate_pvp
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/pvp.py", line 443, in attack
+    await self._error(interaction)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/pvp.py", line 545, in _error
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'attack' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:43:15,782 | ERROR    | discord.app_commands.tree | Ignoring exception in command 'attack'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/pvp.py", line 204, in attack
+    attacker, target = await self._validate_pvp(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/pvp.py", line 148, in _validate_pvp
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/pvp.py", line 443, in attack
+    await self._error(interaction)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/pvp.py", line 545, in _error
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'attack' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:43:17,902 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:44:17 IST)" (scheduled at 2026-04-05 20:43:17.899674+05:30)
+2026-04-05 20:43:17,979 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:44:17 IST)" executed successfully
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/profile.py", line 229, in profile
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-04-05 20:43:44] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'profile'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/profile.py", line 229, in profile
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/profile.py", line 239, in profile
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'profile' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:43:44,669 | ERROR    | discord.app_commands.tree | Ignoring exception in command 'profile'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/profile.py", line 229, in profile
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/profile.py", line 239, in profile
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'profile' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:44:17,903 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:45:17 IST)" (scheduled at 2026-04-05 20:44:17.899674+05:30)
+2026-04-05 20:44:17,961 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:45:17 IST)" executed successfully
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/profile.py", line 229, in profile
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-04-05 20:44:49] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'profile'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/profile.py", line 229, in profile
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/profile.py", line 239, in profile
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'profile' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:44:49,102 | ERROR    | discord.app_commands.tree | Ignoring exception in command 'profile'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/profile.py", line 229, in profile
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/profile.py", line 239, in profile
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'profile' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 82, in hospital
+    await interaction.response.send_message(embed=embed)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-04-05 20:45:01] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'hospital'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 82, in hospital
+    await interaction.response.send_message(embed=embed)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 86, in hospital
+    await interaction.response.send_message("❌ Error loading hospital.", ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'hospital' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:45:01,540 | ERROR    | discord.app_commands.tree | Ignoring exception in command 'hospital'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 82, in hospital
+    await interaction.response.send_message(embed=embed)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 86, in hospital
+    await interaction.response.send_message("❌ Error loading hospital.", ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'hospital' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 157, in revive
+    await interaction.response.send_message(embed=embed)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-04-05 20:45:15] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'revive'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 157, in revive
+    await interaction.response.send_message(embed=embed)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 161, in revive
+    await interaction.response.send_message("❌ Error during revive.", ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'revive' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:45:15,474 | ERROR    | discord.app_commands.tree | Ignoring exception in command 'revive'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 157, in revive
+    await interaction.response.send_message(embed=embed)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 161, in revive
+    await interaction.response.send_message("❌ Error during revive.", ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'revive' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:45:17,902 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:46:17 IST)" (scheduled at 2026-04-05 20:45:17.899674+05:30)
+2026-04-05 20:45:17,974 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:46:17 IST)" executed successfully
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 37, in hospital
+    await interaction.response.send_message(embed=embed)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-04-05 20:45:27] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'hospital'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 37, in hospital
+    await interaction.response.send_message(embed=embed)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 86, in hospital
+    await interaction.response.send_message("❌ Error loading hospital.", ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'hospital' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:45:27,117 | ERROR    | discord.app_commands.tree | Ignoring exception in command 'hospital'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 37, in hospital
+    await interaction.response.send_message(embed=embed)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/hospital.py", line 86, in hospital
+    await interaction.response.send_message("❌ Error loading hospital.", ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'hospital' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/news.py", line 81, in news
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-04-05 20:45:37] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'news'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/news.py", line 81, in news
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/news.py", line 85, in news
+    await interaction.response.send_message("❌ Failed to fetch news.", ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'news' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:45:37,935 | ERROR    | discord.app_commands.tree | Ignoring exception in command 'news'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/news.py", line 81, in news
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/news.py", line 85, in news
+    await interaction.response.send_message("❌ Failed to fetch news.", ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'news' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/leaderboard.py", line 163, in leaderboard
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-04-05 20:45:57] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'leaderboard'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/leaderboard.py", line 163, in leaderboard
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/leaderboard.py", line 166, in leaderboard
+    await interaction.response.send_message("❌ Failed to load leaderboards.", ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'leaderboard' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:45:57,171 | ERROR    | discord.app_commands.tree | Ignoring exception in command 'leaderboard'
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/leaderboard.py", line 163, in leaderboard
+    await interaction.response.send_message(embed=embed, view=view)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/cogs/leaderboard.py", line 166, in leaderboard
+    await interaction.response.send_message("❌ Failed to load leaderboards.", ephemeral=True)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/interactions.py", line 1085, in send_message
+    data = await adapter.create_interaction_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/webhook/async_.py", line 226, in request
+    raise HTTPException(response, data)
+discord.errors.HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yogeswar/Desktop/Projects/Vatswars/venv/lib/python3.12/site-packages/discord/app_commands/commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'leaderboard' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
+2026-04-05 20:46:17,905 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:47:17 IST)" (scheduled at 2026-04-05 20:46:17.899674+05:30)
+2026-04-05 20:46:18,071 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:47:17 IST)" executed successfully

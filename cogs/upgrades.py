@@ -20,10 +20,30 @@ class UpgradesCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    async def upgrade_autocomplete(self, interaction: discord.Interaction, current: str):
+        try:
+            player = await db.get_player(str(interaction.user.id))
+            if not player or not player.get("items"): return []
+            
+            database = db.get_db()
+            items = await database.items.find({"_id": {"$in": player["items"]}}).to_list(None)
+            
+            choices = []
+            for itm in items:
+                upgrades = itm.get("upgrade_count", 0)
+                name = f"[{upgrades}] {itm['name']} (+{itm['total_bonus']})"
+                if current.lower() in name.lower() or current.lower() in itm["_id"]:
+                    choices.append(app_commands.Choice(name=name[:100], value=itm["_id"][:8]))
+                    if len(choices) >= 25: break
+            return choices
+        except Exception:
+            return []
+
     @app_commands.command(
         name="upgrade-item", description="Upgrade an item with RNG outcomes"
     )
-    @app_commands.describe(item_id="The item ID to upgrade (8-char short ID)")
+    @app_commands.describe(item_id="The item to upgrade")
+    @app_commands.autocomplete(item_id=upgrade_autocomplete)
     async def upgrade_item(self, interaction: discord.Interaction, item_id: str):
         if not await utils.check_active(interaction):
             return

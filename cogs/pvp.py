@@ -3,6 +3,7 @@
 # Reads equipment_bonus for combat stats.
 
 import random
+import asyncio
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -12,6 +13,53 @@ import config
 import db
 import utils
 from shift import handle_kill_points
+
+# ── Dramatic Flavor Text ─────────────────────────────────────────
+ATTACK_VERBS = [
+    "threw a devastating haymaker at",
+    "lunged forward and slashed at",
+    "pulled out a shiv and stabbed at",
+    "smashed a bottle over the head of",
+    "delivered a brutal uppercut to",
+    "kicked the legs out from under",
+    "blindsided with a steel pipe",
+    "fired a warning shot that grazed",
+    "sucker-punched",
+    "headbutted",
+    "hit with a flying knee strike at",
+    "dropped a heavy combo on",
+    "cracked knuckles and decked",
+    "went full berserker mode on",
+    "caught with a vicious right hook",
+    "unleashed a flurry of punches on",
+    "body-slammed",
+    "swept the feet and stomped on",
+    "landed a clean cross on",
+    "charged in and tackled",
+]
+
+DODGE_TEXTS = [
+    "barely dodged the attack!",
+    "rolled sideways at the last second!",
+    "blocked with their forearms!",
+    "ducked just in time!",
+    "parried the blow!",
+    "took a glancing hit!",
+    "staggered back but stayed standing!",
+]
+
+KILL_MESSAGES = [
+    "💀 **{winner}** stood over **{loser}**'s unconscious body. The streets remember.",
+    "💀 **{loser}** crumpled to the ground. **{winner}** spat and walked away.",
+    "💀 **{winner}** delivered the final blow. **{loser}** won't be getting up anytime soon.",
+    "💀 The fight is over. **{loser}** lies broken on the pavement. **{winner}** claims victory.",
+    "💀 **{winner}** wiped the blood off their knuckles. **{loser}** was carried away on a stretcher.",
+    "💀 Sirens wail in the distance. **{loser}** is down. **{winner}** vanishes into the shadows.",
+    "💀 **{winner}** cracked their neck and looked down at **{loser}**. \"Stay down.\"",
+    "💀 It's over. **{loser}** never saw **{winner}**'s last hit coming.",
+]
+
+MAX_ROUNDS = 10  # Cap the number of rounds
 
 
 class PvPCog(commands.Cog):
@@ -146,12 +194,12 @@ class PvPCog(commands.Cog):
 
     # ── /attack ───────────────────────────────────────────────
 
-    @app_commands.command(name="attack", description="Attack another player (Kill)")
+    @app_commands.command(name="attack", description="Attack another player (Turn-based combat)")
     @app_commands.describe(user="The player to attack")
     async def attack(self, interaction: discord.Interaction, user: discord.User):
         if not await utils.check_active(interaction):
             return
-            
+
         try:
             attacker, target = await self._validate_pvp(
                 interaction, user, "courage", config.PVP_ATTACK_COURAGE_COST
@@ -162,134 +210,233 @@ class PvPCog(commands.Cog):
             # Deduct courage
             attacker["renewable"]["courage"] -= config.PVP_ATTACK_COURAGE_COST
 
-            # Combat roll using equipment_bonus stats
+            # ── Gather Combat Stats ──────────────────────────
             atk_str = self._get_total_stat(attacker, "strength")
             atk_def = self._get_total_stat(attacker, "defense")
+            atk_spd = self._get_total_stat(attacker, "speed")
+
             tgt_str = self._get_total_stat(target, "strength")
             tgt_def = self._get_total_stat(target, "defense")
+            tgt_spd = self._get_total_stat(target, "speed")
 
-            attacker_power = atk_str + int(atk_def * 0.3) + random.randint(-10, 10)
-            target_power = tgt_str + int(tgt_def * 0.3) + random.randint(-10, 10)
+            # HP pools for this fight
+            atk_hp = attacker["renewable"]["hp"]
+            tgt_hp = target["renewable"]["hp"]
+            atk_hp_max = attacker["renewable"]["hp_max"]
+            tgt_hp_max = target["renewable"]["hp_max"]
 
-            now = datetime.now(timezone.utc)
+            atk_name = attacker["username"]
+            tgt_name = target["username"]
 
-            if attacker_power >= target_power:
-                # ── WIN ──────────────────────────────────────
-                atk_speed = self._get_total_stat(attacker, "speed")
-                tgt_speed = self._get_total_stat(target, "speed")
+            # ── Send initial embed ───────────────────────────
+            embed = discord.Embed(
+                title="⚔️  FIGHT!",
+                description=(
+                    f"**{atk_name}** challenges **{tgt_name}** to a street brawl!\n\n"
+                    f"❤️ {atk_name}: {atk_hp}/{atk_hp_max} HP\n"
+                    f"❤️ {tgt_name}: {tgt_hp}/{tgt_hp_max} HP\n\n"
+                    f"*The fight begins...*"
+                ),
+                color=0x2b2d31,
+            )
+            await interaction.response.send_message(embed=embed)
+            msg = await interaction.original_response()
 
-                steal_pct = config.KILL_BASE_STEAL_PCT + max(
-                    0, (atk_speed - tgt_speed) * config.KILL_SPEED_STEAL_BONUS
-                )
-                stolen = min(
-                    int(target["cash_wallet"] * steal_pct),
-                    target["cash_wallet"],
-                )
+            # ── Turn-based combat loop ──────────────────────
+            combat_log = []
+            round_num = 0
+            winner = None
+            loser = None
 
-                attacker["cash_wallet"] += stolen
-                target["cash_wallet"] -= stolen
+            while atk_hp > 0 and tgt_hp > 0 and round_num < MAX_ROUNDS:
+                round_num += 1
+                await asyncio.sleep(2.5)
 
-                hp_damage = random.randint(20, 40)
-                target["renewable"]["hp"] = max(
-                    0, target["renewable"]["hp"] - hp_damage
-                )
-                
-                killed = target["renewable"]["hp"] == 0
-                hospital_msg = ""
-                if killed:
-                    target["state"] = "hospital"
-                    hospital_msg = f"\n🏥 **{target['username']}** has been sent to the Hospital!"
-                    
-                    # Country Kill Logic
-                    database = db.get_db()
-                    atk_country = attacker.get("country")
-                    tgt_country = target.get("country")
-                    if atk_country and tgt_country and atk_country != tgt_country:
-                        await database.countries.update_one(
-                            {"_id": atk_country}, {"$inc": {"points": 1}}, upsert=True
-                        )
-                        # We don't want negative points generally, but design says -1
-                        # Let's get tgt country points and max 0
-                        tc = await database.countries.find_one({"_id": tgt_country})
-                        if tc and tc.get("points", 0) > 0:
-                            await database.countries.update_one(
-                                {"_id": tgt_country}, {"$inc": {"points": -1}}
-                            )
+                # ── Attacker's turn ──────────────────────────
+                # Damage scales with strength, reduced by target defense
+                base_dmg = max(1, atk_str + random.randint(-3, 5))
+                reduction = max(0, tgt_def * 0.3 + random.randint(-2, 2))
+                dmg = max(1, int(base_dmg - reduction))
 
-                attacker["xp"] += 100
+                tgt_hp = max(0, tgt_hp - dmg)
+                verb = random.choice(ATTACK_VERBS)
+                combat_log.append(f"**{atk_name}** {verb} **{tgt_name}** for **{dmg}** damage!")
 
-                # Shield target
-                target["shield_until"] = now + timedelta(
-                    seconds=config.SHIELD_DURATION_SECONDS
-                )
+                if tgt_hp <= 0:
+                    winner = attacker
+                    loser = target
+                    break
 
-                # Gang shift points
-                if not 'database' in locals(): database = db.get_db()
-                await handle_kill_points(
-                    database, attacker["_id"], target["_id"]
-                )
+                # ── Target's turn ────────────────────────────
+                base_dmg = max(1, tgt_str + random.randint(-3, 5))
+                reduction = max(0, atk_def * 0.3 + random.randint(-2, 2))
+                dmg = max(1, int(base_dmg - reduction))
 
-                # Level up check
-                attacker, leveled = utils.check_level_up(attacker)
+                atk_hp = max(0, atk_hp - dmg)
+                verb = random.choice(ATTACK_VERBS)
+                combat_log.append(f"**{tgt_name}** {verb} **{atk_name}** for **{dmg}** damage!")
 
-                embed = discord.Embed(
-                    title=f"⚔️  Victory! You defeated {target['username']}!",
+                if atk_hp <= 0:
+                    winner = target
+                    loser = attacker
+                    break
+
+                # ── Update the live embed ────────────────────
+                # Show only last 4 log lines to keep it clean
+                recent_log = "\n".join(combat_log[-4:])
+
+                progress_embed = discord.Embed(
+                    title=f"⚔️  ROUND {round_num}",
                     description=(
-                        f"💪 Power: **{attacker_power}** vs {target_power}\n\n"
-                        f"💵 Stolen: {utils.format_cash(stolen)}\n"
-                        f"❤️ Dealt {hp_damage} HP damage\n"
-                        f"⭐ +100 XP\n"
-                        f"🛡️ Target shielded for {config.SHIELD_DURATION_SECONDS // 60}min{hospital_msg}"
+                        f"❤️ {atk_name}: **{atk_hp}**/{atk_hp_max} HP\n"
+                        f"❤️ {tgt_name}: **{tgt_hp}**/{tgt_hp_max} HP\n\n"
+                        f"{recent_log}"
                     ),
-                    color=config.COLOR_SUCCESS,
+                    color=0x2b2d31,
                 )
-                if leveled:
-                    embed.add_field(
-                        name="🎉 LEVEL UP!",
-                        value=f"You are now **Level {attacker['level']}**!",
-                        inline=False,
-                    )
-            else:
-                # ── LOSS ─────────────────────────────────────
-                hp_damage = random.randint(15, 30)
-                attacker["renewable"]["hp"] = max(
-                    0, attacker["renewable"]["hp"] - hp_damage
-                )
-                
-                killed = attacker["renewable"]["hp"] == 0
-                hospital_msg = ""
-                if killed:
-                    attacker["state"] = "hospital"
-                    hospital_msg = f"\n🏥 **You** have been sent to the Hospital!"
+                progress_embed.set_footer(text=f"Round {round_num}/{MAX_ROUNDS}")
 
-                # Target gang gets defense points
-                if not 'database' in locals(): database = db.get_db()
-                if target.get("gang_id"):
-                    tgt_gang = await db.get_gang(target["gang_id"])
-                    if tgt_gang and tgt_gang.get("shift_state") == "active":
+                try:
+                    await msg.edit(embed=progress_embed)
+                except Exception:
+                    pass
+
+            # ── If max rounds hit with no kill ────────────────
+            if winner is None:
+                # Whoever has more HP left wins
+                if atk_hp >= tgt_hp:
+                    winner = attacker
+                    loser = target
+                else:
+                    winner = target
+                    loser = attacker
+
+            # Determine which is the attacker vs target for saving
+            attacker_won = (winner["_id"] == attacker["_id"])
+
+            # ── Final HP updates ─────────────────────────────
+            attacker["renewable"]["hp"] = atk_hp
+            target["renewable"]["hp"] = tgt_hp
+
+            # ── Process kill (hp == 0) ───────────────────────
+            killed = loser["renewable"]["hp"] == 0
+            if killed:
+                loser["state"] = "hospital"
+
+            # ── Rewards ──────────────────────────────────────
+            winner_spd = self._get_total_stat(winner, "speed")
+            # Steal coins from loser's wallet based on winner's speed
+            steal_pct = config.KILL_BASE_STEAL_PCT + max(0, winner_spd * config.KILL_SPEED_STEAL_BONUS)
+            steal_pct = min(0.50, steal_pct)  # Max 50%
+
+            stolen = min(int(loser["cash_wallet"] * steal_pct), loser["cash_wallet"])
+            winner["cash_wallet"] += stolen
+            loser["cash_wallet"] -= stolen
+
+            xp_gain = 100 + (winner_spd // 5)
+            winner["xp"] += xp_gain
+            winner, leveled = utils.check_level_up(winner)
+
+            # ── Shield the loser ─────────────────────────────
+            now = datetime.now(timezone.utc)
+            loser["shield_until"] = now + timedelta(seconds=config.SHIELD_DURATION_SECONDS)
+
+            # ── Country points (only on actual kill) ─────────
+            country_msg = ""
+            if killed:
+                database = db.get_db()
+                w_country = winner.get("country")
+                l_country = loser.get("country")
+                if w_country and l_country and w_country != l_country:
+                    await database.countries.update_one(
+                        {"_id": w_country}, {"$inc": {"points": 1}}, upsert=True
+                    )
+                    tc = await database.countries.find_one({"_id": l_country})
+                    if tc and tc.get("points", 0) > 0:
+                        await database.countries.update_one(
+                            {"_id": l_country}, {"$inc": {"points": -1}}
+                        )
+                    country_msg = f"\n🌍 +1 **{w_country}** | -1 **{l_country}**"
+
+            # ── Gang shift points (ONLY if BOTH are in gangs) ──
+            gang_msg = ""
+            if killed:
+                if not 'database' in dir(): database = db.get_db()
+                w_gang_id = winner.get("gang_id")
+                l_gang_id = loser.get("gang_id")
+                if w_gang_id and l_gang_id:
+                    w_gang = await db.get_gang(w_gang_id)
+                    l_gang = await db.get_gang(l_gang_id)
+
+                    if w_gang and w_gang.get("shift_state") == "active":
                         await database.gangs.update_one(
-                            {"_id": target["gang_id"]},
+                            {"_id": w_gang_id},
                             {"$inc": {"current_shift_points": config.SHIFT_KILL_POINTS}},
                         )
+                        gang_msg += f"\n🏴 +{config.SHIFT_KILL_POINTS} pts [{w_gang.get('tag', '')}]"
 
-                # Shield target anyway
-                target["shield_until"] = now + timedelta(
-                    seconds=config.SHIELD_DURATION_SECONDS
-                )
+                    if l_gang and l_gang.get("shift_state") == "active":
+                        new_pts = max(0, l_gang.get("current_shift_points", 0) - config.SHIFT_KILL_POINTS)
+                        await database.gangs.update_one(
+                            {"_id": l_gang_id},
+                            {"$set": {"current_shift_points": new_pts}},
+                        )
+                        gang_msg += f" | -{config.SHIFT_KILL_POINTS} pts [{l_gang.get('tag', '')}]"
 
-                embed = discord.Embed(
-                    title=f"💀  Defeat! {target['username']} fought you off!",
-                    description=(
-                        f"💪 Power: {attacker_power} vs **{target_power}**\n\n"
-                        f"❤️ You took {hp_damage} HP damage\n"
-                        f"🛡️ Target shielded for {config.SHIELD_DURATION_SECONDS // 60}min{hospital_msg}"
-                    ),
-                    color=config.COLOR_ERROR,
-                )
+            # ── News broadcast ───────────────────────────────
+            if killed:
+                news_text = f"**{winner['username']}** hospitalised **{loser['username']}** in combat!"
+                if gang_msg:
+                    news_text += gang_msg
+                if country_msg:
+                    news_text += country_msg
+                asyncio.create_task(utils.add_news(news_text))
 
+            # ── Save both players ────────────────────────────
             await db.save_player(attacker)
             await db.save_player(target)
-            await interaction.response.send_message(embed=embed)
+
+            # ── Build final dramatic embed ───────────────────
+            await asyncio.sleep(2)
+
+            kill_line = random.choice(KILL_MESSAGES).format(
+                winner=winner["username"], loser=loser["username"]
+            )
+
+            hospital_line = ""
+            if killed:
+                hospital_line = f"\n\n🏥 **{loser['username']}** has been sent to the Hospital!"
+
+            final_embed = discord.Embed(
+                title="⚔️  THE FIGHT IS OVER",
+                description=(
+                    f"{kill_line}\n\n"
+                    f"───────────────────\n"
+                    f"❤️ {atk_name}: **{atk_hp}** HP\n"
+                    f"❤️ {tgt_name}: **{tgt_hp}** HP\n"
+                    f"───────────────────\n\n"
+                    f"**Rewards for {winner['username']}:**\n"
+                    f"💵 Looted: {utils.format_cash(stolen)}\n"
+                    f"⭐ +{xp_gain} XP\n"
+                    f"🛡️ {loser['username']} shielded for {config.SHIELD_DURATION_SECONDS // 60}min"
+                    f"{hospital_line}{country_msg}{gang_msg}"
+                ),
+                color=config.COLOR_SUCCESS if attacker_won else config.COLOR_ERROR,
+            )
+
+            if leveled:
+                final_embed.add_field(
+                    name="🎉 LEVEL UP!",
+                    value=f"**{winner['username']}** is now **Level {winner['level']}**!",
+                    inline=False,
+                )
+
+            final_embed.set_footer(text=f"Fight lasted {round_num} round(s)")
+
+            try:
+                await msg.edit(embed=final_embed)
+            except Exception:
+                pass
 
         except Exception as e:
             import traceback; traceback.print_exc()
@@ -302,7 +449,7 @@ class PvPCog(commands.Cog):
     async def rob(self, interaction: discord.Interaction, user: discord.User):
         if not await utils.check_active(interaction):
             return
-            
+
         try:
             attacker, target = await self._validate_pvp(
                 interaction, user, "stamina", config.PVP_ROB_STAMINA_COST
@@ -348,6 +495,9 @@ class PvPCog(commands.Cog):
                 attacker["cash_wallet"] += stolen
                 target["cash_wallet"] -= stolen
 
+                if stolen > 0:
+                    asyncio.create_task(utils.add_news(f"**{attacker['username']}** successfully robbed **{target['username']}** for {utils.format_cash(stolen)}!"))
+
                 embed = discord.Embed(
                     title=f"🏃  Robbery Successful!",
                     description=(
@@ -363,7 +513,9 @@ class PvPCog(commands.Cog):
                 prison_mins = min(5, max(1, attacker["level"] // 20))
                 attacker["state"] = "prison"
                 attacker["prison_until"] = datetime.now(timezone.utc) + timedelta(minutes=prison_mins)
-                
+
+                asyncio.create_task(utils.add_news(f"**{attacker['username']}** was sent to Jail for a failed robbery attempt on **{target['username']}**!"))
+
                 embed = discord.Embed(
                     title=f"🚔  Busted! Robbery Failed!",
                     description=(

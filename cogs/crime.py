@@ -218,6 +218,11 @@ class CrimeSelect(discord.ui.Select):
             )
             from cogs.upgrades import update_slot_rank
             await update_slot_rank(item["slot"])
+            
+            p = await database.players.find_one({"_id": player_id})
+            if p and item.get("tier") in ("rare", "very_rare", "legendary"):
+                tier_name = item["tier"].replace("_", " ").title()
+                await utils.add_news(f"**{p['username']}** found a **{tier_name}** {item['name']}!")
         except Exception as e:
             import logging
             logging.error(f"Failed to process crime drop: {e}")

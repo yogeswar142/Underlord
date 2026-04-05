@@ -49,15 +49,12 @@ class GymView(discord.ui.View):
                 )
                 return
 
-            # Check cooldown
-            remaining = utils.cooldown_remaining(
-                player["cooldowns"].get("gym"), config.GYM_COOLDOWN_SECONDS
-            )
-            if remaining > 0:
+            gym_level = player["buildings"].get("gym", 0)
+            if gym_level == 0:
                 embed = discord.Embed(
-                    title="⏳  Gym Cooldown",
-                    description=f"You can train again in **{utils.format_cooldown(remaining)}**.",
-                    color=config.COLOR_WARNING,
+                    title="🏋️  No Gym",
+                    description="You must `/build gym` before you can train your stats.",
+                    color=config.COLOR_ERROR,
                 )
                 await interaction.response.send_message(embed=embed, ephemeral=True)
                 return
@@ -89,9 +86,7 @@ class GymView(discord.ui.View):
             old_val = player["stats"][stat_name]
             player["stats"][stat_name] += gain
 
-            # Save cooldown
-            player["cooldowns"]["gym"] = datetime.now(timezone.utc)
-
+            # Update UI without disabling buttons
             await db.save_player(player)
 
             # Response
@@ -107,10 +102,6 @@ class GymView(discord.ui.View):
             )
             if gym_level > 0:
                 embed.set_footer(text=f"Gym Building Lv.{gym_level} bonus applied")
-
-            # Disable buttons after use
-            for child in self.children:
-                child.disabled = True
 
             await interaction.response.edit_message(embed=embed, view=self)
 
@@ -168,24 +159,25 @@ class StatsCog(commands.Cog):
                 await interaction.response.send_message(embed=embed, ephemeral=True)
                 return
 
-            # Check cooldown for display
-            remaining = utils.cooldown_remaining(
-                player["cooldowns"].get("gym"), config.GYM_COOLDOWN_SECONDS
-            )
-
             gym_level = player["buildings"].get("gym", 0)
+            if gym_level == 0:
+                embed = discord.Embed(
+                    title="🏋️  No Gym",
+                    description="You must construct a Gym first. Use `/build gym` to build one.",
+                    color=config.COLOR_ERROR,
+                )
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+                return
+
             bonus_text = f" (+{gym_level * config.GYM_GAIN_PER_LEVEL:.1f} bonus from Gym Lv.{gym_level})" if gym_level > 0 else ""
 
             description = (
                 f"🔋 Stamina: **{player['renewable']['stamina']}/{player['renewable']['stamina_max']}**\n\n"
-                f"Choose your training:\n"
+                f"Choose your training (Repeatedly click to train!):\n"
                 f"💪 **Lift** — Strength +1{bonus_text} (costs {config.GYM_MODES['lift']['stamina_cost']} stamina)\n"
                 f"🛡️ **Endure** — Defense +1{bonus_text} (costs {config.GYM_MODES['endure']['stamina_cost']} stamina)\n"
                 f"⚡ **Sprint** — Speed +1{bonus_text} (costs {config.GYM_MODES['sprint']['stamina_cost']} stamina)"
             )
-
-            if remaining > 0:
-                description += f"\n\n⏳ Cooldown: **{utils.format_cooldown(remaining)}**"
 
             embed = discord.Embed(
                 title="🏋️  Gym",

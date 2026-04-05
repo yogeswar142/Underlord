@@ -208,12 +208,6 @@ class ShopCog(commands.Cog):
         except Exception:
             import traceback; traceback.print_exc()
 
-    shop_group = app_commands.Group(name="shop_cmd", description="Shop group if needed") # Keep /shop buy as a sub command
-    # Actually wait, the spec said `/shop buy [id_key]`. If we have a single root command `/shop`
-    # You can't mix root commands with subcommands of the same name cleanly in Discord.
-    # The UI buttons handle buying directly. We'll add `/shop_buy` or rely solely on buttons.
-    # Wait, the spec specifies "/shop buy [id_key]".
-    
     # We can't have both `/shop` (slash command) and `/shop buy` 
     # unless /shop is a group. But we can't invoke a group!
     # I'll just rely on the interactive buttons which is perfectly standard and superior UX!

@@ -140,6 +140,36 @@ class CountrySelectView(discord.ui.View):
         await interaction.response.edit_message(view=self)
 
 
+class ProfilePaginationSelect(discord.ui.Select):
+    def __init__(self):
+        options = [
+            discord.SelectOption(label="Overview", value="overview", description="Basic info, Faction, Rank", emoji="📋"),
+            discord.SelectOption(label="Stats & Resources", value="stats", description="Permanent & renewable stats, Currency", emoji="📈"),
+            discord.SelectOption(label="Equipment Setup", value="equipment", description="Equipped items & combat loadout", emoji="🎒"),
+            discord.SelectOption(label="Properties & Assets", value="buildings", description="Owned buildings & real estate", emoji="🏗️"),
+        ]
+        super().__init__(placeholder="Select profile category...", options=options, custom_id="profile_select")
+
+    async def callback(self, interaction: discord.Interaction):
+        # We fetch fresh player data in case it updated
+        database = db.get_db()
+        player = await database.players.find_one({"_id": str(self.view.target.id)})
+        
+        if not player:
+            return await interaction.response.send_message("Could not retrieve player.", ephemeral=True)
+            
+        embed = await self.view.cog.build_profile_embed(player, self.view.target, self.values[0])
+        await interaction.response.edit_message(embed=embed, view=self.view)
+
+
+class ProfileView(discord.ui.View):
+    def __init__(self, cog, target: discord.User):
+        super().__init__(timeout=120)
+        self.cog = cog
+        self.target = target
+        self.add_item(ProfilePaginationSelect())
+
+
 class ProfileCog(commands.Cog):
     """Player profile and faction selection."""
 
@@ -194,8 +224,9 @@ class ProfileCog(commands.Cog):
                 return
 
             # ── Build profile embed ───────────────────────────
-            embed = await self._build_profile_embed(player, target)
-            await interaction.response.send_message(embed=embed)
+            embed = await self.build_profile_embed(player, target, "overview")
+            view = ProfileView(self, target)
+            await interaction.response.send_message(embed=embed, view=view)
 
         except Exception as e:
             import traceback
@@ -207,20 +238,11 @@ class ProfileCog(commands.Cog):
             )
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    async def _build_profile_embed(
-        self, player: dict, discord_user: discord.User
-    ) -> discord.Embed:
-        """Build the full profile embed."""
-        # Faction line
-        faction = player.get("faction") or "None"
-        faction_emoji = config.FACTION_EMOJIS.get(faction, "❓")
-        faction_display = f"{faction_emoji} {faction.title()}" if faction != "None" else "❓ No Faction"
-
-        # VIP badge
+    async def build_profile_embed(self, player: dict, discord_user: discord.User, category: str = "overview") -> discord.Embed:
+        """Build the paginated profile embed."""
         vip = utils.is_vip(player)
         vip_badge = " 👑 VIP" if vip else ""
-
-        # Wanted status
+        
         wanted = ""
         if player.get("wanted_until"):
             w_until = player["wanted_until"]
@@ -228,104 +250,120 @@ class ProfileCog(commands.Cog):
                 w_until = w_until.replace(tzinfo=timezone.utc)
             if w_until > datetime.now(timezone.utc):
                 wanted = " 🚨 WANTED"
+                
+        state_badge = ""
+        user_state = player.get("state", "normal")
+        if user_state == "hospital":
+            state_badge = " 🏥 INCAPACITATED"
+        elif user_state == "prison":
+            state_badge = " 🚔 IN PRISON"
 
         embed = discord.Embed(
-            title=f"{discord_user.display_name}{vip_badge}{wanted}",
+            title=f"{discord_user.display_name}{vip_badge}{wanted}{state_badge}",
             color=config.COLOR_VIP if vip else config.COLOR_INFO,
         )
 
         if discord_user.avatar:
             embed.set_thumbnail(url=discord_user.avatar.url)
 
-        # ── Level & XP ───────────────────────────────────────
-        xp_display = utils.xp_bar(player["xp"], player["xp_to_next"])
-        embed.add_field(
-            name=f"📊 Level {player['level']}",
-            value=xp_display,
-            inline=False,
-        )
+        embed.set_footer(text=f"ID: {player['_id']} • Player since {player['created_at'].strftime('%b %d, %Y')}")
 
-        country = player.get("country") or "Unknown"
-        # ── Faction & Country ────────────────────────────────
-        embed.add_field(name="Faction", value=faction_display, inline=True)
-        embed.add_field(name="🌍 Country", value=f"**{country}**", inline=True)
+        if category == "overview":
+            faction = player.get("faction") or "None"
+            faction_emoji = config.FACTION_EMOJIS.get(faction, "❓")
+            faction_display = f"{faction_emoji} {faction.title()}" if faction != "None" else "❓ No Faction"
+            
+            country = player.get("country") or "Unknown"
+            
+            gang_name = "None"
+            if player.get("gang_id"):
+                gang = await db.get_gang(player["gang_id"])
+                if gang:
+                    gang_name = f"{gang.get('tag', '')} {gang['name']}"
+                    
+            xp_display = utils.xp_bar(player["xp"], player["xp_to_next"])
+            
+            embed.description = "### 📋 Overview"
+            embed.add_field(name="Level & XP", value=f"**Level {player['level']}**\n{xp_display}", inline=False)
+            embed.add_field(name="Identity", value=f"**Faction**: {faction_display}\n**Country**: 🌍 {country}", inline=True)
+            embed.add_field(name="Gang", value=f"**{gang_name}**", inline=True)
+            
+        elif category == "stats":
+            embed.description = "### 📈 Stats & Resources"
+            
+            s = player["stats"]
+            eb = player.get("equipment_bonus", {"strength": 0, "defense": 0, "speed": 0, "happiness": 0})
+            stats_text = (
+                f"💪 Strength: **{s['strength']}** (+{eb['strength']})\n"
+                f"🛡️ Defense: **{s['defense']}** (+{eb['defense']})\n"
+                f"⚡ Speed: **{s['speed']}** (+{eb['speed']})\n"
+                f"😊 Happiness: **{s['happiness']}** (+{eb['happiness']})"
+            )
+            embed.add_field(name="Permanent Stats", value=stats_text, inline=True)
+            
+            r = player["renewable"]
+            renew_text = (
+                f"🔋 Stamina:\n{utils.stat_bar(r['stamina'], r['stamina_max'], 8)}\n"
+                f"🦁 Courage:\n{utils.stat_bar(r['courage'], r['courage_max'], 8)}\n"
+                f"❤️ HP:\n{utils.stat_bar(r['hp'], r['hp_max'], 8)}"
+            )
+            embed.add_field(name="Renewable Reserves", value=renew_text, inline=True)
+            
+            wallet_text = (
+                f"💵 Wallet: {utils.format_cash(player['cash_wallet'])}\n"
+                f"🏦 Bank: {utils.format_cash(player['cash_bank'])}\n"
+                f"💎 Diamonds: {player['diamonds']:,}"
+            )
+            embed.add_field(name="Finances", value=wallet_text, inline=False)
+            
+        elif category == "equipment":
+            embed.description = "### 🎒 Equipment Setup"
+            
+            inv = player["inventory"]
+            equipped_ids = [iid for iid in inv.values() if iid is not None]
+            items_dict = await db.get_items_by_ids(equipped_ids)
 
-        # ── Gang ─────────────────────────────────────────────
-        gang_name = "None"
-        if player.get("gang_id"):
-            gang = await db.get_gang(player["gang_id"])
-            if gang:
-                gang_name = f"{gang.get('tag', '')} {gang['name']}"
-        embed.add_field(name="Gang", value=gang_name, inline=True)
+            slot_emojis = {
+                "hat": "🎩", "jacket": "🧥", "shoes": "👟",
+                "car": "🚗", "weapon1": "🔫", "weapon2": "🗡️",
+                "jewellery": "💍",
+            }
 
-        # Spacer
-        embed.add_field(name="\u200b", value="\u200b", inline=True)
+            equip_lines = []
+            for slot, item_id in inv.items():
+                emoji = slot_emojis.get(slot, "•")
+                if item_id and item_id in items_dict:
+                    item = items_dict[item_id]
+                    tier_tag = item["tier"].replace("_", " ").title()
+                    equip_lines.append(f"{emoji} **{slot.title()}**: {item['name']} ({tier_tag})\n└ *Bonus: +{item['total_bonus']} {item['stat_type'].title()}*")
+                else:
+                    equip_lines.append(f"{emoji} **{slot.title()}**: —\n└ *(Empty)*")
 
-        # ── Permanent stats ──────────────────────────────────
-        s = player["stats"]
-        eb = player.get("equipment_bonus", {"strength": 0, "defense": 0, "speed": 0, "happiness": 0})
-        stats_text = (
-            f"💪 Strength: **{s['strength']}** (+{eb['strength']})\n"
-            f"🛡️ Defense: **{s['defense']}** (+{eb['defense']})\n"
-            f"⚡ Speed: **{s['speed']}** (+{eb['speed']})\n"
-            f"😊 Happiness: **{s['happiness']}** (+{eb['happiness']})"
-        )
-        embed.add_field(name="📈 Stats", value=stats_text, inline=True)
-
-        # ── Renewable stats ──────────────────────────────────
-        r = player["renewable"]
-        renew_text = (
-            f"🔋 Stamina: {utils.stat_bar(r['stamina'], r['stamina_max'], 8)}\n"
-            f"🦁 Courage: {utils.stat_bar(r['courage'], r['courage_max'], 8)}\n"
-            f"❤️ HP: {utils.stat_bar(r['hp'], r['hp_max'], 8)}"
-        )
-        embed.add_field(name="♻️ Renewable", value=renew_text, inline=True)
-
-        # Spacer
-        embed.add_field(name="\u200b", value="\u200b", inline=True)
-
-        # ── Wallet ───────────────────────────────────────────
-        wallet_text = (
-            f"💵 Wallet: {utils.format_cash(player['cash_wallet'])}\n"
-            f"🏦 Bank: {utils.format_cash(player['cash_bank'])}\n"
-            f"💎 Diamonds: {player['diamonds']:,}"
-        )
-        embed.add_field(name="💰 Finances", value=wallet_text, inline=True)
-
-        # ── Equipment summary ────────────────────────────────
-        inv = player["inventory"]
-        equipped_ids = [
-            iid for iid in inv.values() if iid is not None
-        ]
-        items_dict = await db.get_items_by_ids(equipped_ids)
-
-        slot_emojis = {
-            "hat": "🎩", "jacket": "🧥", "shoes": "👟",
-            "car": "🚗", "weapon1": "🔫", "weapon2": "🗡️",
-            "jewellery": "💍",
-        }
-
-        equip_lines = []
-        for slot, item_id in inv.items():
-            emoji = slot_emojis.get(slot, "•")
-            if item_id and item_id in items_dict:
-                item = items_dict[item_id]
-                tier_tag = item["tier"].replace("_", " ").title()
-                equip_lines.append(
-                    f"{emoji} **{slot.title()}**: {item['name']} ({tier_tag})"
-                )
+            embed.add_field(name="Combat Loadout", value="\n\n".join(equip_lines[:4]), inline=True)
+            embed.add_field(name="Accessories", value="\n\n".join(equip_lines[4:]), inline=True)
+            
+        elif category == "buildings":
+            embed.description = "### 🏗️ Properties & Assets"
+            
+            bldgs = player.get("buildings", {})
+            if not bldgs:
+                embed.add_field(name="Real Estate", value="You don't own any properties yet.\nUse `/build` to get started.", inline=False)
             else:
-                equip_lines.append(f"{emoji} **{slot.title()}**: —")
-
-        embed.add_field(
-            name="🎒 Equipment",
-            value="\n".join(equip_lines),
-            inline=True,
-        )
-
-        embed.set_footer(
-            text=f"ID: {player['_id']} • Player since {player['created_at'].strftime('%b %d, %Y')}"
-        )
+                lines = []
+                for k, v in bldgs.items():
+                    emoji = config.BUILDINGS.get(k, {}).get("emoji", "🏗️")
+                    name = k.replace("_", " ").title()
+                    lines.append(f"{emoji} **{name}** — Level {v}")
+                
+                embed.add_field(name="Real Estate Portfolio", value="\n".join(lines), inline=False)
+                
+            fleet = player.get("fleet", [])
+            if fleet:
+                ships_text = []
+                for s in fleet:
+                    status = "At Sea" if s.get("at_sea") else "Docked"
+                    ships_text.append(f"⛵ **{s['name']}** ({status})")
+                embed.add_field(name="Naval Fleet", value="\n".join(ships_text), inline=False)
 
         return embed
 
