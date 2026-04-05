@@ -253,9 +253,10 @@ class PvPCog(commands.Cog):
                 await asyncio.sleep(2.5)
 
                 # ── Attacker's turn ──────────────────────────
-                # Damage scales with strength, reduced by target defense
-                base_dmg = max(1, atk_str + random.randint(-3, 5))
-                reduction = max(0, tgt_def * 0.3 + random.randint(-2, 2))
+                # Damage scales heavily with strength, reduced by target defense
+                weapon_dmg = int(atk_str * 2.5)  # Scale strength making gear matter much more
+                base_dmg = max(1, weapon_dmg + random.randint(-5, 10))
+                reduction = max(0, int((tgt_def * 1.5) * 0.3) + random.randint(-2, 5))
                 dmg = max(1, int(base_dmg - reduction))
 
                 tgt_hp = max(0, tgt_hp - dmg)
@@ -268,8 +269,9 @@ class PvPCog(commands.Cog):
                     break
 
                 # ── Target's turn ────────────────────────────
-                base_dmg = max(1, tgt_str + random.randint(-3, 5))
-                reduction = max(0, atk_def * 0.3 + random.randint(-2, 2))
+                weapon_dmg = int(tgt_str * 2.5)
+                base_dmg = max(1, weapon_dmg + random.randint(-5, 10))
+                reduction = max(0, int((atk_def * 1.5) * 0.3) + random.randint(-2, 5))
                 dmg = max(1, int(base_dmg - reduction))
 
                 atk_hp = max(0, atk_hp - dmg)
@@ -303,13 +305,15 @@ class PvPCog(commands.Cog):
 
             # ── If max rounds hit with no kill ────────────────
             if winner is None:
-                # Whoever has more HP left wins
+                # Whoever has more HP left wins, loser is forced to 0 HP
                 if atk_hp >= tgt_hp:
                     winner = attacker
                     loser = target
+                    tgt_hp = 0
                 else:
                     winner = target
                     loser = attacker
+                    atk_hp = 0
 
             # Determine which is the attacker vs target for saving
             attacker_won = (winner["_id"] == attacker["_id"])

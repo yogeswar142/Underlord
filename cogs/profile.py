@@ -185,42 +185,31 @@ class ProfileCog(commands.Cog):
     ):
         try:
             target = user or interaction.user
-            player = await db.ensure_player(
-                str(target.id), target.display_name
-            )
+            player = await db.get_player(str(target.id))
 
-            # If no faction yet and viewing own profile → prompt
-            if player["faction"] is None and target.id == interaction.user.id:
-                embed = discord.Embed(
-                    title="⚔️  Welcome to the Underworld",
-                    description=(
-                        "Before you begin, choose your **faction**.\n"
-                        "This is a **permanent** choice that shapes your playstyle.\n\n"
-                        "🔪 **Thug** — +15% Strength, +10% Stamina cap\n"
-                        "💼 **Businessman** — +15% Speed, +20% income\n"
-                        "🛡️ **Policeman** — +15% Defense, +10% Courage cap"
-                    ),
-                    color=config.COLOR_WARNING,
-                )
-                view = FactionSelectView(str(interaction.user.id))
-                await interaction.response.send_message(
-                    embed=embed, view=view, ephemeral=True
-                )
+            if not player:
+                if target.id == interaction.user.id:
+                    embed = discord.Embed(
+                        title="❌  Not Registered",
+                        description="You haven't joined the Underworld yet!\nUse `/register` to create your character.",
+                        color=config.COLOR_ERROR,
+                    )
+                else:
+                    embed = discord.Embed(
+                        title="❌  Player Not Found",
+                        description=f"**{target.display_name}** hasn't registered yet.",
+                        color=config.COLOR_ERROR,
+                    )
+                await interaction.response.send_message(embed=embed, ephemeral=True)
                 return
 
-            if player.get("country") is None and target.id == interaction.user.id:
+            if player["faction"] is None or player.get("country") is None:
                 embed = discord.Embed(
-                    title="🌍  Select Your Country",
-                    description=(
-                        "You must swear allegiance to a country. "
-                        "Foreign kills during gang shifts will grant your nation shift points!"
-                    ),
+                    title="⚠️  Registration Incomplete",
+                    description="Your setup isn't complete yet.\nUse `/register` to finish choosing your faction and country.",
                     color=config.COLOR_WARNING,
                 )
-                view = CountrySelectView(str(interaction.user.id))
-                await interaction.response.send_message(
-                    embed=embed, view=view, ephemeral=True
-                )
+                await interaction.response.send_message(embed=embed, ephemeral=True)
                 return
 
             # ── Build profile embed ───────────────────────────

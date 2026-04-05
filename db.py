@@ -121,6 +121,9 @@ def default_player(user_id: str, username: str) -> dict:
         "country": None,
         "state": "normal",  # can be "normal", "hospital", "prison"
         "prison_until": None,
+        
+        "referred_by": None,
+        "referral_claimed_by_inviter": False,
     }
 
 
