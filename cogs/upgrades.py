@@ -25,6 +25,9 @@ class UpgradesCog(commands.Cog):
     )
     @app_commands.describe(item_id="The item ID to upgrade (8-char short ID)")
     async def upgrade_item(self, interaction: discord.Interaction, item_id: str):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name

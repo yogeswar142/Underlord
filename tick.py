@@ -23,6 +23,8 @@ async def refill_tick(db):
             "vip_active_until": 1,
             "renewable": 1,
             "level": 1,
+            "state": 1,
+            "prison_until": 1,
         },
     ).to_list(None)
 
@@ -49,20 +51,34 @@ async def refill_tick(db):
         new_st = min(st_max, r["stamina"] + int(st_max * rate))
         new_co = min(co_max, r["courage"] + int(co_max * rate))
         new_hp = min(hp_max, r["hp"] + int(hp_max * rate))
+        
+        updates = {
+            "renewable.stamina": new_st,
+            "renewable.stamina_max": st_max,
+            "renewable.courage": new_co,
+            "renewable.courage_max": co_max,
+            "renewable.hp": new_hp,
+            "renewable.hp_max": hp_max,
+        }
+        
+        # Check Hospital state
+        state = p.get("state", "normal")
+        if state == "hospital" and new_hp >= (hp_max * 0.5):
+            updates["state"] = "normal"
+            
+        # Check Prison state
+        if state == "prison":
+            p_until = p.get("prison_until")
+            if p_until:
+                if p_until.tzinfo is None:
+                    p_until = p_until.replace(tzinfo=timezone.utc)
+                if now >= p_until:
+                    updates["state"] = "normal"
 
         ops.append(
             UpdateOne(
                 {"_id": p["_id"]},
-                {
-                    "$set": {
-                        "renewable.stamina": new_st,
-                        "renewable.stamina_max": st_max,
-                        "renewable.courage": new_co,
-                        "renewable.courage_max": co_max,
-                        "renewable.hp": new_hp,
-                        "renewable.hp_max": hp_max,
-                    }
-                },
+                {"$set": updates},
             )
         )
 

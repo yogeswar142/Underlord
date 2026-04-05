@@ -27,6 +27,18 @@ FACTION_BONUSES = {
     "policeman":  {"defense": 1.15, "courage_bonus": 1.10},
 }
 
+# ── Countries ─────────────────────────────────────────────────
+COUNTRIES = [
+    "USA", "Russia", "Italy", "Japan", "Colombia", "Mexico", "China", "UK", 
+    "Brazil", "India", "France", "Germany", "Canada", "Australia", "Spain", 
+    "South Korea", "Turkey", "Argentina", "South Africa", "Nigeria", "Egypt", 
+    "Saudi Arabia", "Indonesia", "Iran", "Pakistan", "Thailand", "Vietnam", 
+    "Philippines", "Ukraine", "Poland", "Sweden", "Netherlands", "Belgium", 
+    "Switzerland", "Austria", "Greece", "Portugal", "Ireland", "Norway", 
+    "Denmark", "Finland", "New Zealand", "Singapore", "Malaysia", "UAE", 
+    "Israel", "Chile", "Peru", "Morocco", "Kenya"
+]
+
 # ── Gym costs & rewards ───────────────────────────────────────
 GYM_MODES = {
     "lift":    {"stamina_cost": 4, "stat": "strength", "base_gain": 1},

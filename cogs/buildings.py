@@ -28,6 +28,9 @@ class BuildingsCog(commands.Cog):
     async def build(
         self, interaction: discord.Interaction, building: str
     ):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name
@@ -107,6 +110,9 @@ class BuildingsCog(commands.Cog):
     async def upgrade(
         self, interaction: discord.Interaction, building: str
     ):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name
@@ -183,6 +189,9 @@ class BuildingsCog(commands.Cog):
 
     @app_commands.command(name="collect", description="Collect passive income from buildings")
     async def collect(self, interaction: discord.Interaction):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name
@@ -299,6 +308,9 @@ class BuildingsCog(commands.Cog):
 
     @farm_group.command(name="start", description="Start a farming cycle")
     async def farm_start(self, interaction: discord.Interaction):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name
@@ -369,6 +381,9 @@ class BuildingsCog(commands.Cog):
 
     @farm_group.command(name="collect", description="Collect harvested grain")
     async def farm_collect(self, interaction: discord.Interaction):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name
@@ -449,6 +464,9 @@ class BuildingsCog(commands.Cog):
         ship_name: str,
         cargo_type: str,
     ):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name
@@ -562,6 +580,9 @@ class BuildingsCog(commands.Cog):
 
     @ship_group.command(name="collect", description="Collect returning ships")
     async def ship_collect(self, interaction: discord.Interaction):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name

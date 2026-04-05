@@ -31,6 +31,9 @@ class GymView(discord.ui.View):
             )
             return
 
+        if not await utils.check_active(interaction):
+            return
+
         try:
             player = await db.get_player(self.user_id)
             if not player:
@@ -148,6 +151,9 @@ class StatsCog(commands.Cog):
 
     @app_commands.command(name="gym", description="Train your stats at the gym")
     async def gym(self, interaction: discord.Interaction):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name

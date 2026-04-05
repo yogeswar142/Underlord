@@ -65,6 +65,36 @@ def is_vip(player: dict) -> bool:
     until = player.get("vip_active_until")
     return until is not None and until > datetime.now(timezone.utc)
 
+# ── State check ───────────────────────────────────────────────
+
+async def check_active(interaction) -> bool:
+    """Returns True if player is normal. If hospital/prison, sends error and returns False."""
+    import db
+    import discord
+    player = await db.get_player(str(interaction.user.id))
+    if not player:
+        return True
+        
+    state = player.get("state", "normal")
+    if state == "hospital":
+        embed = discord.Embed(
+            title="🏥  Incapacitated",
+            description="You are currently recovering in the Hospital! You cannot do this right now.",
+            color=config.COLOR_ERROR
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return False
+    elif state == "prison":
+        embed = discord.Embed(
+            title="🚔  Behind Bars",
+            description="You are currently locked up in Prison! You cannot do this right now.",
+            color=config.COLOR_ERROR
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return False
+        
+    return True
+
 
 # ── Equipment bonus recalculation ─────────────────────────────
 

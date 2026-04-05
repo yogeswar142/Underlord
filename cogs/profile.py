@@ -57,7 +57,7 @@ class FactionSelectView(discord.ui.View):
             title=f"{emoji}  Faction Chosen: {faction.title()}",
             description=(
                 f"Your stats have been adjusted with **{faction.title()}** bonuses.\n\n"
-                f"Use `/profile` to see your updated stats."
+                f"Now use `/profile` again to select your **Country**."
             ),
             color=config.COLOR_SUCCESS,
         )
@@ -83,6 +83,61 @@ class FactionSelectView(discord.ui.View):
         self, interaction: discord.Interaction, button: discord.ui.Button
     ):
         await self._pick_faction(interaction, "policeman")
+
+
+class CountrySelect(discord.ui.Select):
+    def __init__(self, user_id: str, page: int = 0):
+        self.user_id = user_id
+        options = []
+        start = page * 25
+        # Discord limits select menus to 25 items
+        for country in config.COUNTRIES[start:start+25]:
+            options.append(discord.SelectOption(label=country, value=country, emoji="🌍"))
+            
+        super().__init__(placeholder="Select your country...", options=options, min_values=1, max_values=1)
+
+    async def callback(self, interaction: discord.Interaction):
+        if str(interaction.user.id) != self.user_id:
+            await interaction.response.send_message("This isn't your setup.", ephemeral=True)
+            return
+
+        choice = self.values[0]
+        player = await db.get_player(self.user_id)
+        if player:
+            player["country"] = choice
+            await db.save_player(player)
+
+            embed = discord.Embed(
+                title=f"🌍  Country Chosen: {choice}",
+                description="Your nationality is sealed in blood. You are now fully registered in the Underworld.\n\nRun `/profile` to view your stats.",
+                color=config.COLOR_SUCCESS
+            )
+            for child in self.view.children:
+                child.disabled = True
+            await interaction.response.edit_message(embed=embed, view=self.view)
+
+class CountrySelectView(discord.ui.View):
+    def __init__(self, user_id: str):
+        super().__init__(timeout=120)
+        self.user_id = user_id
+        self.page = 0
+        self.select = CountrySelect(user_id, self.page)
+        self.add_item(self.select)
+
+    @discord.ui.button(label="Next 25 Countries", style=discord.ButtonStyle.secondary, row=1)
+    async def next_page(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if str(interaction.user.id) != self.user_id:
+            return
+            
+        self.page += 1
+        if self.page * 25 >= len(config.COUNTRIES):
+            self.page = 0 # loop back
+            
+        self.remove_item(self.select)
+        self.select = CountrySelect(self.user_id, self.page)
+        # re-insert at the top
+        self.children.insert(0, self.select)
+        await interaction.response.edit_message(view=self)
 
 
 class ProfileCog(commands.Cog):
@@ -118,6 +173,21 @@ class ProfileCog(commands.Cog):
                     color=config.COLOR_WARNING,
                 )
                 view = FactionSelectView(str(interaction.user.id))
+                await interaction.response.send_message(
+                    embed=embed, view=view, ephemeral=True
+                )
+                return
+
+            if player.get("country") is None and target.id == interaction.user.id:
+                embed = discord.Embed(
+                    title="🌍  Select Your Country",
+                    description=(
+                        "You must swear allegiance to a country. "
+                        "Foreign kills during gang shifts will grant your nation shift points!"
+                    ),
+                    color=config.COLOR_WARNING,
+                )
+                view = CountrySelectView(str(interaction.user.id))
                 await interaction.response.send_message(
                     embed=embed, view=view, ephemeral=True
                 )
@@ -175,8 +245,10 @@ class ProfileCog(commands.Cog):
             inline=False,
         )
 
-        # ── Faction ──────────────────────────────────────────
+        country = player.get("country") or "Unknown"
+        # ── Faction & Country ────────────────────────────────
         embed.add_field(name="Faction", value=faction_display, inline=True)
+        embed.add_field(name="🌍 Country", value=f"**{country}**", inline=True)
 
         # ── Gang ─────────────────────────────────────────────
         gang_name = "None"

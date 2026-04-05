@@ -37,6 +37,9 @@ class CrimeSelect(discord.ui.Select):
                 "This isn't your crime menu.", ephemeral=True
             )
             return
+            
+        if not await utils.check_active(interaction):
+            return
 
         crime_key = self.values[0]
         crime = config.CRIMES[crime_key]
@@ -305,6 +308,9 @@ class CrimeCog(commands.Cog):
 
     @app_commands.command(name="crime", description="Commit a crime for cash, XP, and more")
     async def crime(self, interaction: discord.Interaction):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name

@@ -120,6 +120,9 @@ class InventoryCog(commands.Cog):
     @app_commands.command(name="equip", description="Equip an item from your inventory")
     @app_commands.describe(item_id="The item ID (first 8 chars shown in /items)")
     async def equip(self, interaction: discord.Interaction, item_id: str):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name
@@ -218,6 +221,9 @@ class InventoryCog(commands.Cog):
         app_commands.Choice(name="💍 Jewellery", value="jewellery"),
     ])
     async def unequip(self, interaction: discord.Interaction, slot: str):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             player = await db.ensure_player(
                 str(interaction.user.id), interaction.user.display_name

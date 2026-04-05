@@ -117,6 +117,10 @@ def default_player(user_id: str, username: str) -> dict:
         "daily_streak": 0,
 
         "created_at": datetime.now(timezone.utc),
+        
+        "country": None,
+        "state": "normal",  # can be "normal", "hospital", "prison"
+        "prison_until": None,
     }
 
 

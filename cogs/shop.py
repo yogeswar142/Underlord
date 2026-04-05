@@ -124,6 +124,9 @@ class ShopView(discord.ui.View):
         await interaction.response.edit_message(embed=embed, view=self)
 
 async def handle_buy(interaction: discord.Interaction, id_key: str):
+    if not await utils.check_active(interaction):
+        return
+        
     try:
         player = await db.ensure_player(str(interaction.user.id), interaction.user.display_name)
         
@@ -191,6 +194,9 @@ class ShopCog(commands.Cog):
 
     @app_commands.command(name="shop", description="Browse and buy gear from the black market")
     async def shop(self, interaction: discord.Interaction):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             embed = discord.Embed(
                 title="🏪  Welcome to the Black Market",

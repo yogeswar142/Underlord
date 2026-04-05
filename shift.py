@@ -176,6 +176,12 @@ async def end_shift(bot, db):
         {},
         {"$set": {"current_shift_points": 0}},
     )
+    
+    # Reset Country points for the active shift
+    await db.countries.update_many(
+        {},
+        {"$set": {"points": 0}},
+    )
 
 
 async def handle_kill_points(db, attacker_id: str, target_id: str):

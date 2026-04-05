@@ -149,6 +149,9 @@ class PvPCog(commands.Cog):
     @app_commands.command(name="attack", description="Attack another player (Kill)")
     @app_commands.describe(user="The player to attack")
     async def attack(self, interaction: discord.Interaction, user: discord.User):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             attacker, target = await self._validate_pvp(
                 interaction, user, "courage", config.PVP_ATTACK_COURAGE_COST
@@ -190,6 +193,28 @@ class PvPCog(commands.Cog):
                 target["renewable"]["hp"] = max(
                     0, target["renewable"]["hp"] - hp_damage
                 )
+                
+                killed = target["renewable"]["hp"] == 0
+                hospital_msg = ""
+                if killed:
+                    target["state"] = "hospital"
+                    hospital_msg = f"\n🏥 **{target['username']}** has been sent to the Hospital!"
+                    
+                    # Country Kill Logic
+                    database = db.get_db()
+                    atk_country = attacker.get("country")
+                    tgt_country = target.get("country")
+                    if atk_country and tgt_country and atk_country != tgt_country:
+                        await database.countries.update_one(
+                            {"_id": atk_country}, {"$inc": {"points": 1}}, upsert=True
+                        )
+                        # We don't want negative points generally, but design says -1
+                        # Let's get tgt country points and max 0
+                        tc = await database.countries.find_one({"_id": tgt_country})
+                        if tc and tc.get("points", 0) > 0:
+                            await database.countries.update_one(
+                                {"_id": tgt_country}, {"$inc": {"points": -1}}
+                            )
 
                 attacker["xp"] += 100
 
@@ -199,7 +224,7 @@ class PvPCog(commands.Cog):
                 )
 
                 # Gang shift points
-                database = db.get_db()
+                if not 'database' in locals(): database = db.get_db()
                 await handle_kill_points(
                     database, attacker["_id"], target["_id"]
                 )
@@ -214,7 +239,7 @@ class PvPCog(commands.Cog):
                         f"💵 Stolen: {utils.format_cash(stolen)}\n"
                         f"❤️ Dealt {hp_damage} HP damage\n"
                         f"⭐ +100 XP\n"
-                        f"🛡️ Target shielded for {config.SHIELD_DURATION_SECONDS // 60}min"
+                        f"🛡️ Target shielded for {config.SHIELD_DURATION_SECONDS // 60}min{hospital_msg}"
                     ),
                     color=config.COLOR_SUCCESS,
                 )
@@ -230,9 +255,15 @@ class PvPCog(commands.Cog):
                 attacker["renewable"]["hp"] = max(
                     0, attacker["renewable"]["hp"] - hp_damage
                 )
+                
+                killed = attacker["renewable"]["hp"] == 0
+                hospital_msg = ""
+                if killed:
+                    attacker["state"] = "hospital"
+                    hospital_msg = f"\n🏥 **You** have been sent to the Hospital!"
 
                 # Target gang gets defense points
-                database = db.get_db()
+                if not 'database' in locals(): database = db.get_db()
                 if target.get("gang_id"):
                     tgt_gang = await db.get_gang(target["gang_id"])
                     if tgt_gang and tgt_gang.get("shift_state") == "active":
@@ -251,7 +282,7 @@ class PvPCog(commands.Cog):
                     description=(
                         f"💪 Power: {attacker_power} vs **{target_power}**\n\n"
                         f"❤️ You took {hp_damage} HP damage\n"
-                        f"🛡️ Target shielded for {config.SHIELD_DURATION_SECONDS // 60}min"
+                        f"🛡️ Target shielded for {config.SHIELD_DURATION_SECONDS // 60}min{hospital_msg}"
                     ),
                     color=config.COLOR_ERROR,
                 )
@@ -269,6 +300,9 @@ class PvPCog(commands.Cog):
     @app_commands.command(name="rob", description="Rob another player (Speed contest)")
     @app_commands.describe(user="The player to rob")
     async def rob(self, interaction: discord.Interaction, user: discord.User):
+        if not await utils.check_active(interaction):
+            return
+            
         try:
             attacker, target = await self._validate_pvp(
                 interaction, user, "stamina", config.PVP_ROB_STAMINA_COST
@@ -325,11 +359,16 @@ class PvPCog(commands.Cog):
                 )
             else:
                 # ── LOSS ─────────────────────────────────────
+                # Arrested
+                prison_mins = min(5, max(1, attacker["level"] // 20))
+                attacker["state"] = "prison"
+                attacker["prison_until"] = datetime.now(timezone.utc) + timedelta(minutes=prison_mins)
+                
                 embed = discord.Embed(
-                    title=f"🏃  Robbery Failed!",
+                    title=f"🚔  Busted! Robbery Failed!",
                     description=(
                         f"⚡ Speed: {attacker_roll} vs **{target_roll}**\n\n"
-                        f"**{target['username']}** was too fast. You got nothing."
+                        f"**{target['username']}** was too fast. You got caught and were sent to **Prison** for {prison_mins} minute(s)!"
                     ),
                     color=config.COLOR_ERROR,
                 )
