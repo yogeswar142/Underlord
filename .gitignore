@@ -9,6 +9,9 @@ venv/
 .venv/
 env/
 
+# Assets images
+assets/
+
 # Environment variables
 .env
 

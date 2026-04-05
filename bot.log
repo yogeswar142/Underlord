@@ -719,3 +719,5 @@ Traceback (most recent call last):
 discord.app_commands.errors.CommandInvokeError: Command 'leaderboard' raised an exception: HTTPException: 400 Bad Request (error code: 40060): Interaction has already been acknowledged.
 2026-04-05 20:46:17,905 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:47:17 IST)" (scheduled at 2026-04-05 20:46:17.899674+05:30)
 2026-04-05 20:46:18,071 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:47:17 IST)" executed successfully
+2026-04-05 20:47:17,903 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:48:17 IST)" (scheduled at 2026-04-05 20:47:17.899674+05:30)
+2026-04-05 20:47:17,978 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 20:48:17 IST)" executed successfully
