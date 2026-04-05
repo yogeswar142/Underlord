@@ -4,6 +4,7 @@
 from datetime import datetime, timezone
 from uuid import uuid4
 import config
+import discord
 
 
 # ── Level system ──────────────────────────────────────────────

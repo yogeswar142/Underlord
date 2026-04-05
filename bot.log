@@ -1,38 +1,38 @@
-2026-04-05 23:29:45,073 | WARNING  | discord.client | PyNaCl is not installed, voice will NOT be supported
-2026-04-05 23:29:45,073 | WARNING  | discord.client | davey is not installed, voice will NOT be supported
-[2026-04-05 23:29:45] [WARNING ] discord.ext.commands.bot: Privileged message content intent is missing, commands may not work as expected.
-2026-04-05 23:29:45,075 | WARNING  | discord.ext.commands.bot | Privileged message content intent is missing, commands may not work as expected.
-[2026-04-05 23:29:45] [INFO    ] discord.client: logging in using static token
-2026-04-05 23:29:45,076 | INFO     | discord.client | logging in using static token
-[2026-04-05 23:29:46] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 48582a68ee96608b558ab5f7757f6be3).
-2026-04-05 23:29:46,872 | INFO     | discord.gateway | Shard ID None has connected to Gateway (Session ID: 48582a68ee96608b558ab5f7757f6be3).
-2026-04-05 23:29:48,889 | INFO     | underworld | Connected to MongoDB.
-2026-04-05 23:29:48,892 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
-2026-04-05 23:29:48,893 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
-2026-04-05 23:29:48,893 | INFO     | apscheduler.scheduler | Added job "refill_tick" to job store "default"
-2026-04-05 23:29:48,894 | INFO     | apscheduler.scheduler | Added job "end_shift" to job store "default"
-2026-04-05 23:29:48,894 | INFO     | apscheduler.scheduler | Scheduler started
-2026-04-05 23:29:48,894 | INFO     | underworld | APScheduler started (tick + shift jobs).
-2026-04-05 23:29:48,907 | ERROR    | underworld | ❌  Failed to load cog cogs.buildings: Extension 'cogs.buildings' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,909 | ERROR    | underworld | ❌  Failed to load cog cogs.crime: Extension 'cogs.crime' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,911 | ERROR    | underworld | ❌  Failed to load cog cogs.daily: Extension 'cogs.daily' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,912 | ERROR    | underworld | ❌  Failed to load cog cogs.gang: Extension 'cogs.gang' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,914 | INFO     | underworld | ✅  Loaded cog: cogs.help
-2026-04-05 23:29:48,915 | ERROR    | underworld | ❌  Failed to load cog cogs.hospital: Extension 'cogs.hospital' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,917 | ERROR    | underworld | ❌  Failed to load cog cogs.inventory: Extension 'cogs.inventory' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,918 | ERROR    | underworld | ❌  Failed to load cog cogs.leaderboard: Extension 'cogs.leaderboard' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,921 | ERROR    | underworld | ❌  Failed to load cog cogs.market: Extension 'cogs.market' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,922 | ERROR    | underworld | ❌  Failed to load cog cogs.news: Extension 'cogs.news' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,923 | ERROR    | underworld | ❌  Failed to load cog cogs.prison: Extension 'cogs.prison' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,925 | ERROR    | underworld | ❌  Failed to load cog cogs.profile: Extension 'cogs.profile' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,927 | ERROR    | underworld | ❌  Failed to load cog cogs.pvp: Extension 'cogs.pvp' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,928 | ERROR    | underworld | ❌  Failed to load cog cogs.referral: Extension 'cogs.referral' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,929 | ERROR    | underworld | ❌  Failed to load cog cogs.register: Extension 'cogs.register' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,936 | ERROR    | underworld | ❌  Failed to load cog cogs.shop: Extension 'cogs.shop' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,938 | ERROR    | underworld | ❌  Failed to load cog cogs.stats: Extension 'cogs.stats' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,939 | ERROR    | underworld | ❌  Failed to load cog cogs.status: Extension 'cogs.status' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,945 | ERROR    | underworld | ❌  Failed to load cog cogs.upgrades: Extension 'cogs.upgrades' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,946 | ERROR    | underworld | ❌  Failed to load cog cogs.vip: Extension 'cogs.vip' raised an error: NameError: name 'discord' is not defined
-2026-04-05 23:29:48,946 | INFO     | underworld | Cog loader finished: 1 loaded, 19 failed.
-2026-04-05 23:29:49,530 | INFO     | underworld | Synced 1 slash commands.
-2026-04-05 23:29:49,530 | INFO     | underworld | 🏴 Underworld Empire online as Underlord#6139 (ID: 1490257458961190922)
+2026-04-05 23:32:57,092 | WARNING  | discord.client | PyNaCl is not installed, voice will NOT be supported
+2026-04-05 23:32:57,092 | WARNING  | discord.client | davey is not installed, voice will NOT be supported
+[2026-04-05 23:32:57] [WARNING ] discord.ext.commands.bot: Privileged message content intent is missing, commands may not work as expected.
+2026-04-05 23:32:57,094 | WARNING  | discord.ext.commands.bot | Privileged message content intent is missing, commands may not work as expected.
+[2026-04-05 23:32:57] [INFO    ] discord.client: logging in using static token
+2026-04-05 23:32:57,094 | INFO     | discord.client | logging in using static token
+[2026-04-05 23:32:59] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: ccd9d328154c90f6b56bc3eef41b6908).
+2026-04-05 23:32:59,344 | INFO     | discord.gateway | Shard ID None has connected to Gateway (Session ID: ccd9d328154c90f6b56bc3eef41b6908).
+2026-04-05 23:33:01,392 | INFO     | underworld | Connected to MongoDB.
+2026-04-05 23:33:01,395 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-05 23:33:01,396 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-05 23:33:01,397 | INFO     | apscheduler.scheduler | Added job "refill_tick" to job store "default"
+2026-04-05 23:33:01,397 | INFO     | apscheduler.scheduler | Added job "end_shift" to job store "default"
+2026-04-05 23:33:01,397 | INFO     | apscheduler.scheduler | Scheduler started
+2026-04-05 23:33:01,397 | INFO     | underworld | APScheduler started (tick + shift jobs).
+2026-04-05 23:33:01,413 | INFO     | underworld | ✅  Loaded cog: cogs.buildings
+2026-04-05 23:33:01,414 | INFO     | underworld | ✅  Loaded cog: cogs.crime
+2026-04-05 23:33:01,416 | INFO     | underworld | ✅  Loaded cog: cogs.daily
+2026-04-05 23:33:01,418 | INFO     | underworld | ✅  Loaded cog: cogs.gang
+2026-04-05 23:33:01,420 | INFO     | underworld | ✅  Loaded cog: cogs.help
+2026-04-05 23:33:01,421 | INFO     | underworld | ✅  Loaded cog: cogs.hospital
+2026-04-05 23:33:01,423 | INFO     | underworld | ✅  Loaded cog: cogs.inventory
+2026-04-05 23:33:01,425 | INFO     | underworld | ✅  Loaded cog: cogs.leaderboard
+2026-04-05 23:33:01,429 | INFO     | underworld | ✅  Loaded cog: cogs.market
+2026-04-05 23:33:01,431 | INFO     | underworld | ✅  Loaded cog: cogs.news
+2026-04-05 23:33:01,433 | INFO     | underworld | ✅  Loaded cog: cogs.prison
+2026-04-05 23:33:01,435 | INFO     | underworld | ✅  Loaded cog: cogs.profile
+2026-04-05 23:33:01,437 | INFO     | underworld | ✅  Loaded cog: cogs.pvp
+2026-04-05 23:33:01,438 | INFO     | underworld | ✅  Loaded cog: cogs.referral
+2026-04-05 23:33:01,441 | INFO     | underworld | ✅  Loaded cog: cogs.register
+2026-04-05 23:33:01,443 | INFO     | underworld | ✅  Loaded cog: cogs.shop
+2026-04-05 23:33:01,445 | INFO     | underworld | ✅  Loaded cog: cogs.stats
+2026-04-05 23:33:01,446 | INFO     | underworld | ✅  Loaded cog: cogs.status
+2026-04-05 23:33:01,448 | INFO     | underworld | ✅  Loaded cog: cogs.upgrades
+2026-04-05 23:33:01,450 | INFO     | underworld | ✅  Loaded cog: cogs.vip
+2026-04-05 23:33:01,450 | INFO     | underworld | Cog loader finished: 20 loaded, 0 failed.
+2026-04-05 23:33:02,453 | INFO     | underworld | Synced 30 slash commands.
+2026-04-05 23:33:02,453 | INFO     | underworld | 🏴 Underworld Empire online as Underlord#6139 (ID: 1490257458961190922)
