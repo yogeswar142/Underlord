@@ -99,7 +99,7 @@ class CrimeSelect(discord.ui.Select):
             success = roll <= success_chance
 
             if success:
-                embed = await self._handle_success(player, crime, crime_name)
+                embed = await self._handle_success(player, crime, crime_name, interaction)
             else:
                 embed = await self._handle_failure(
                     player, crime, crime_name, interaction
@@ -136,7 +136,7 @@ class CrimeSelect(discord.ui.Select):
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
     async def _handle_success(
-        self, player: dict, crime: dict, crime_name: str
+        self, player: dict, crime: dict, crime_name: str, interaction: discord.Interaction
     ) -> discord.Embed:
         """Handle successful crime."""
         results = []
@@ -178,7 +178,47 @@ class CrimeSelect(discord.ui.Select):
             value=f"{player['renewable']['stamina']}/{player['renewable']['stamina_max']}",
             inline=True,
         )
+        
+        # Roll Item Drop
+        drop = utils.roll_item_drop("crime", is_vip=utils.is_vip(player))
+        if drop:
+            # Process DB asynchronously so it doesn't block the UI
+            import asyncio
+            asyncio.create_task(self.process_crime_drop(interaction, player["_id"], drop))
+            
+            TIER_EMOJIS = {"common": "⬜", "uncommon": "🟩", "rare": "🟦", "very_rare": "🟪", "legendary": "🟡"}
+            emoji = TIER_EMOJIS.get(drop["tier"], "⬜")
+            tier_name = drop["tier"].replace("_", " ").title()
+            
+            # Append Drop Section
+            embed.add_field(
+                name="🎁  Loot Drop!",
+                value=(
+                    f"{emoji} **{drop['name']}** ({tier_name})\n"
+                    f"**Bonus:** +{drop['total_bonus']} {drop['stat_type'].title()}\n"
+                    f"*{drop['lore']}*"
+                ),
+                inline=False
+            )
+            
         return embed
+
+    async def process_crime_drop(self, interaction: discord.Interaction, player_id: str, item: dict):
+        """Async task to save the drop so it doesn't block."""
+        try:
+            item["owner_id"] = player_id
+            database = db.get_db()
+            await database.items.insert_one(item)
+            await database.players.update_one(
+                {"_id": player_id},
+                {"$push": {"items": item["_id"]}}
+            )
+            from cogs.upgrades import update_slot_rank
+            await update_slot_rank(item["slot"])
+        except Exception as e:
+            import logging
+            logging.error(f"Failed to process crime drop: {e}")
+
 
     async def _handle_failure(
         self,

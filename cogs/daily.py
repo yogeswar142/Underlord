@@ -89,13 +89,38 @@ class DailyCog(commands.Cog):
             if leveled:
                 rewards.append(f"🎉 **LEVEL UP!** You are now Level {player['level']}!")
 
-            await db.save_player(player)
-
             embed = discord.Embed(
                 title="📅  Daily Reward Claimed!",
                 description="\n".join(rewards),
                 color=config.COLOR_VIP if vip else config.COLOR_SUCCESS,
             )
+
+            # Check for Item Drops based on streak
+            drop = None
+            if streak % 30 == 0:
+                drop = utils.roll_item_drop("daily_30", is_vip=vip)
+            elif streak % 7 == 0:
+                drop = utils.roll_item_drop("daily_7", is_vip=vip)
+                
+            if drop:
+                import asyncio
+                asyncio.create_task(self.process_daily_drop(str(interaction.user.id), drop))
+                
+                TIER_EMOJIS = {"common": "⬜", "uncommon": "🟩", "rare": "🟦", "very_rare": "🟪", "legendary": "🟡"}
+                emoji = TIER_EMOJIS.get(drop["tier"], "⬜")
+                tier_name = drop["tier"].replace("_", " ").title()
+                
+                embed.add_field(
+                    name="🎁  Loyalty Drop!",
+                    value=(
+                        f"{emoji} **{drop['name']}** ({tier_name})\n"
+                        f"**Bonus:** +{drop['total_bonus']} {drop['stat_type'].title()}\n"
+                        f"*{drop['lore']}*"
+                    ),
+                    inline=False
+                )
+
+            await db.save_player(player)
             await interaction.response.send_message(embed=embed)
 
         except Exception as e:
@@ -108,6 +133,21 @@ class DailyCog(commands.Cog):
             )
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
+    async def process_daily_drop(self, player_id: str, item: dict):
+        """Async task to save the daily drop."""
+        try:
+            item["owner_id"] = player_id
+            database = db.get_db()
+            await database.items.insert_one(item)
+            await database.players.update_one(
+                {"_id": player_id},
+                {"$push": {"items": item["_id"]}}
+            )
+            from cogs.upgrades import update_slot_rank
+            await update_slot_rank(item["slot"])
+        except Exception as e:
+            import logging
+            logging.error(f"Failed to process daily drop: {e}")
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(DailyCog(bot))

@@ -27,7 +27,7 @@ log = logging.getLogger("underworld")
 
 # ── Bot setup ─────────────────────────────────────────────────
 intents = discord.Intents.default()
-intents.members = True
+# intents.members = True # Disabled to avoid privileged intent requirement
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
@@ -115,7 +115,7 @@ async def on_ready():
     scheduler.add_job(
         end_shift,
         CronTrigger(hour="8,20", minute=0, timezone="UTC"),
-        args=[database],
+        args=[bot, database],
         id="end_shift",
         replace_existing=True,
     )

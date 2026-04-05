@@ -14,7 +14,9 @@ class LeaderboardCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="leaderboard", description="View top 10 rankings")
+    leaderboard_group = app_commands.Group(name="leaderboard", description="View top rankings")
+
+    @leaderboard_group.command(name="general", description="View top 10 global rankings")
     @app_commands.describe(category="Leaderboard category")
     @app_commands.choices(category=[
         app_commands.Choice(name="💪 Strength", value="strength"),
@@ -25,7 +27,7 @@ class LeaderboardCog(commands.Cog):
         app_commands.Choice(name="🏴 Gang Power", value="gang_power"),
         app_commands.Choice(name="⚔️ Gang Shift", value="gang_shift"),
     ])
-    async def leaderboard(self, interaction: discord.Interaction, category: str):
+    async def general(self, interaction: discord.Interaction, category: str):
         try:
             database = db.get_db()
             embed = discord.Embed(color=config.COLOR_INFO)
@@ -105,6 +107,57 @@ class LeaderboardCog(commands.Cog):
             try: await interaction.response.send_message(embed=embed, ephemeral=True)
             except: await interaction.followup.send(embed=embed, ephemeral=True)
 
+    @leaderboard_group.command(name="item", description="View top 10 items globally for a given slot")
+    @app_commands.describe(slot="The equipment slot to view")
+    @app_commands.choices(slot=[
+        app_commands.Choice(name="🎩 Hat", value="hat"),
+        app_commands.Choice(name="🧥 Jacket", value="jacket"),
+        app_commands.Choice(name="👟 Shoes", value="shoes"),
+        app_commands.Choice(name="🚗 Car", value="car"),
+        app_commands.Choice(name="🔫 Weapon 1", value="weapon1"),
+        app_commands.Choice(name="🗡️ Weapon 2", value="weapon2"),
+        app_commands.Choice(name="💍 Jewellery", value="jewellery"),
+    ])
+    async def item_leaderboard(self, interaction: discord.Interaction, slot: str):
+        try:
+            database = db.get_db()
+            items = await database.items.find(
+                {"slot": slot}
+            ).sort("total_bonus", -1).limit(10).to_list(None)
+
+            embed = discord.Embed(
+                title=f"🏆 Top 10 — {slot.title()}",
+                color=config.COLOR_INFO
+            )
+            
+            if not items:
+                embed.description = "No items exist in this slot yet."
+                await interaction.response.send_message(embed=embed)
+                return
+
+            lines = []
+            TIER_EMOJIS = {"common": "⬜", "uncommon": "🟩", "rare": "🟦", "very_rare": "🟪", "legendary": "🟡"}
+            
+            for i, itm in enumerate(items, 1):
+                owner_name = "Unknown Player"
+                if itm.get("owner_id"):
+                    player = await database.players.find_one({"_id": itm["owner_id"]})
+                    if player:
+                        owner_name = player.get("username", "Unknown")
+                        
+                medal = ["🥇", "🥈", "🥉"][i-1] if i <= 3 else f"**{i}.**"
+                emoji = TIER_EMOJIS.get(itm.get("tier", "common"), "⬜")
+                upg_str = f" [+ {itm.get('upgrade_count', 0)}]" if itm.get('upgrade_count', 0) > 0 else ""
+                lines.append(f"{medal} {emoji} **{itm['name']}**{upg_str} (+{itm['total_bonus']} {itm['stat_type'].title()})\n   └ Owner: **{owner_name}**")
+                
+            embed.description = "\n\n".join(lines)
+            await interaction.response.send_message(embed=embed)
+
+        except Exception:
+            import traceback; traceback.print_exc()
+            embed = discord.Embed(title="❌ Error", description="Something went wrong.", color=config.COLOR_ERROR)
+            try: await interaction.response.send_message(embed=embed, ephemeral=True)
+            except: pass
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(LeaderboardCog(bot))

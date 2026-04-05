@@ -85,25 +85,30 @@ def recalc_equipment_bonus(player: dict, items_dict: dict) -> dict:
     return bonus
 
 
-# ── Item generation ───────────────────────────────────────────
+# ── Item generation & drops ──────────────────────────────────────
 
-def generate_item(
-    slot: str,
-    tier: str = "common",
-    name: str = "Unknown Item",
-    owner_id: str | None = None,
-) -> dict:
-    """Create a new item document."""
+def generate_item_from_catalog(id_key: str) -> dict:
+    """
+    Creates a new item document in the items collection format
+    from a catalog entry.
+    """
+    from items_catalog import ITEMS_CATALOG
+    from uuid import uuid4
+    from datetime import datetime, timezone
+
+    template = ITEMS_CATALOG[id_key]
     return {
         "_id": str(uuid4()),
-        "owner_id": owner_id,
-        "slot": slot,
-        "name": name,
-        "tier": tier,
-        "stat_type": config.SLOT_STAT_MAP[slot],
-        "base_stat": config.TIER_BONUS[tier],
+        "catalog_id": id_key,
+        "owner_id": None,          # set after purchase/drop
+        "slot": template["slot"],
+        "name": template["name"],
+        "lore": template["lore"],
+        "tier": template["tier"],
+        "stat_type": template["stat_type"],
+        "base_stat": template["base_stat"],
         "upgrade_count": 0,
-        "total_bonus": config.TIER_BONUS[tier],
+        "total_bonus": template["base_stat"],
         "slot_rank": 0,
         "on_market": False,
         "market_price": None,
@@ -112,6 +117,57 @@ def generate_item(
         "entry_fee_paid": 0,
         "created_at": datetime.now(timezone.utc),
     }
+
+def roll_item_drop(source: str, is_vip: bool = False) -> dict | None:
+    """
+    Roll for an item drop based on DROP RATE TABLE.
+    source: "crime" | "bank_heist" | "daily_7" | "daily_30" | "shift_top1" | "shift_top2" | "shift_top3" | "mine"
+    """
+    import random
+    from items_catalog import get_all_slots, get_drop_pool
+    
+    # [Common, Uncommon, Rare, Very Rare, Legendary]
+    rates = {
+        "crime": {"common": 0.30, "uncommon": 0.08, "rare": 0.02, "very_rare": 0.0, "legendary": 0.0},
+        "bank_heist": {"common": 0.0, "uncommon": 0.20, "rare": 0.15, "very_rare": 0.05, "legendary": 0.0},
+        "shift_top1": {"common": 0.0, "uncommon": 0.0, "rare": 0.0, "very_rare": 0.40, "legendary": 0.05},
+        "shift_top2": {"common": 0.0, "uncommon": 0.0, "rare": 0.0, "very_rare": 0.20, "legendary": 0.02},
+        "shift_top3": {"common": 0.0, "uncommon": 0.0, "rare": 0.30, "very_rare": 0.10, "legendary": 0.0},
+        "daily_7": {"common": 0.0, "uncommon": 0.50, "rare": 0.30, "very_rare": 0.0, "legendary": 0.0},
+        "daily_30": {"common": 0.0, "uncommon": 0.0, "rare": 0.50, "very_rare": 0.30, "legendary": 0.05},
+        "mine": {"common": 0.0, "uncommon": 0.0, "rare": 0.20, "very_rare": 0.05, "legendary": 0.0}, # per 10 diamonds
+    }
+    
+    if source not in rates:
+        return None
+        
+    source_rates = rates[source]
+    roll = random.random()
+    
+    # Process from rarest to most common to give them precedence
+    tier_found = None
+    if roll < source_rates["legendary"]:
+        tier_found = "legendary"
+    elif roll < source_rates["legendary"] + source_rates["very_rare"]:
+        tier_found = "very_rare"
+    elif roll < source_rates["legendary"] + source_rates["very_rare"] + source_rates["rare"]:
+        tier_found = "rare"
+    elif roll < source_rates["legendary"] + source_rates["very_rare"] + source_rates["rare"] + source_rates["uncommon"]:
+        tier_found = "uncommon"
+    elif roll < source_rates["legendary"] + source_rates["very_rare"] + source_rates["rare"] + source_rates["uncommon"] + source_rates["common"]:
+        tier_found = "common"
+        
+    if not tier_found:
+        return None
+        
+    slot = random.choice(get_all_slots())
+    pool = get_drop_pool(slot, tier_found)
+    
+    if not pool:
+        return None
+        
+    id_key = random.choice(pool)
+    return generate_item_from_catalog(id_key)
 
 
 # ── PvP helpers ───────────────────────────────────────────────

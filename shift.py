@@ -8,7 +8,7 @@ from pymongo import UpdateOne
 import config
 
 
-async def end_shift(db):
+async def end_shift(bot, db):
     """
     End the current shift:
     1. Rank active gangs by current_shift_points.
@@ -55,6 +55,60 @@ async def end_shift(db):
                     }
                 },
             )
+            
+            # Drops and DMs
+            import utils
+            import discord
+            from cogs.upgrades import update_slot_rank
+            
+            rank = i + 1
+            source_key = f"shift_top{rank}"
+            
+            for m_id in all_members:
+                player = await db.players.find_one({"_id": m_id})
+                if not player:
+                    continue
+                    
+                drop = utils.roll_item_drop(source_key, is_vip=utils.is_vip(player))
+                embed = discord.Embed(
+                    title="🏴 Gang Shift Ended",
+                    description=(
+                        f"Your gang placed **#{rank}**! You received:\n"
+                        f"💵 {utils.format_cash(reward['cash'])}\n"
+                        f"⭐ {reward['xp']} XP\n"
+                        f"💎 {reward['diamonds']} Diamonds"
+                    ),
+                    color=config.COLOR_SUCCESS
+                )
+                
+                if drop:
+                    drop["owner_id"] = m_id
+                    await db.items.insert_one(drop)
+                    await db.players.update_one(
+                        {"_id": m_id},
+                        {"$push": {"items": drop["_id"]}}
+                    )
+                    await update_slot_rank(drop["slot"])
+                    
+                    TIER_EMOJIS = {"common": "⬜", "uncommon": "🟩", "rare": "🟦", "very_rare": "🟪", "legendary": "🟡"}
+                    emoji = TIER_EMOJIS.get(drop["tier"], "⬜")
+                    tier_name = drop["tier"].replace("_", " ").title()
+                    embed.add_field(
+                        name="🏆 Shift Drop!",
+                        value=(
+                            f"{emoji} **{drop['name']}** ({tier_name})\n"
+                            f"**Bonus:** +{drop['total_bonus']} {drop['stat_type'].title()}\n"
+                            f"*{drop['lore']}*"
+                        ),
+                        inline=False
+                    )
+                
+                try:
+                    user = await bot.fetch_user(int(m_id))
+                    if user:
+                        await user.send(embed=embed)
+                except Exception:
+                    pass # DMs disabled
 
         # Increment gang shift_wins
         await db.gangs.update_one(

@@ -62,9 +62,12 @@ class InventoryCog(commands.Cog):
                 if item_id and item_id in equipped_dict:
                     item = equipped_dict[item_id]
                     tier = item["tier"].replace("_", " ").title()
+                    rank_str = f" | {slot.title()} Global Rank #{item['slot_rank']}" if item.get("slot_rank", 0) > 0 else ""
+                    upg_str = f" [+ {item.get('upgrade_count', 0)}]" if item.get("upgrade_count", 0) > 0 else ""
                     equip_lines.append(
-                        f"{emoji} **{slot.title()}**: {item['name']} "
-                        f"({tier}) +{item['total_bonus']} {item['stat_type']}"
+                        f"{emoji} **{slot.title()}**: **{item['name']}**{upg_str} ({tier})\n"
+                        f"   └ ⚡ +{item['total_bonus']} {item['stat_type'].title()}{rank_str}\n"
+                        f"   └ *{item.get('lore', '')}*"
                     )
                 else:
                     equip_lines.append(f"{emoji} **{slot.title()}**: — empty")
@@ -82,10 +85,13 @@ class InventoryCog(commands.Cog):
                 for item in unequipped[:15]:  # Cap display at 15
                     tier = item["tier"].replace("_", " ").title()
                     emoji = slot_emojis.get(item["slot"], "•")
+                    rank_str = f" | Rank #{item['slot_rank']}" if item.get("slot_rank", 0) > 0 else ""
+                    upg_str = f" [+ {item.get('upgrade_count', 0)}]" if item.get("upgrade_count", 0) > 0 else ""
                     inv_lines.append(
                         f"{emoji} `{utils.short_id(item['_id'])}` "
-                        f"{item['name']} ({tier}) — "
-                        f"+{item['total_bonus']} {item['stat_type']}"
+                        f"**{item['name']}**{upg_str} ({tier}) — "
+                        f"+{item['total_bonus']} {item['stat_type']}{rank_str}\n"
+                        f"   └ *{item.get('lore', '')}*"
                     )
                 if len(unequipped) > 15:
                     inv_lines.append(f"... and {len(unequipped) - 15} more")
@@ -166,11 +172,15 @@ class InventoryCog(commands.Cog):
             await db.save_player(player)
 
             tier = target_item["tier"].replace("_", " ").title()
+            rank_str = f" | {slot.title()} Global Rank #{target_item.get('slot_rank')}" if target_item.get("slot_rank", 0) > 0 else ""
+            upg_str = f" [+ {target_item.get('upgrade_count', 0)}]" if target_item.get('upgrade_count', 0) > 0 else ""
+            
             embed = discord.Embed(
                 title=f"⚔️  Equipped: {target_item['name']}",
                 description=(
-                    f"**{target_item['name']}** ({tier}) → **{slot.title()}**\n"
-                    f"+{target_item['total_bonus']} {target_item['stat_type']}"
+                    f"**{target_item['name']}**{upg_str} ({tier}) → **{slot.title()}**\n"
+                    f"⚡ +{target_item['total_bonus']} {target_item['stat_type'].title()}{rank_str}\n"
+                    f"*{target_item.get('lore', '')}*\n"
                     f"{swap_msg}"
                 ),
                 color=config.COLOR_SUCCESS,
