@@ -1,40 +1,48 @@
-2026-04-05 22:55:29,584 | WARNING  | discord.client | PyNaCl is not installed, voice will NOT be supported
-2026-04-05 22:55:29,585 | WARNING  | discord.client | davey is not installed, voice will NOT be supported
-[2026-04-05 22:55:29] [WARNING ] discord.ext.commands.bot: Privileged message content intent is missing, commands may not work as expected.
-2026-04-05 22:55:29,587 | WARNING  | discord.ext.commands.bot | Privileged message content intent is missing, commands may not work as expected.
-[2026-04-05 22:55:29] [INFO    ] discord.client: logging in using static token
-2026-04-05 22:55:29,587 | INFO     | discord.client | logging in using static token
-[2026-04-05 22:55:31] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 801ba76991b998fabf18e9940d08620f).
-2026-04-05 22:55:31,636 | INFO     | discord.gateway | Shard ID None has connected to Gateway (Session ID: 801ba76991b998fabf18e9940d08620f).
-2026-04-05 22:55:33,656 | INFO     | underworld | Connected to MongoDB.
-2026-04-05 22:55:33,660 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
-2026-04-05 22:55:33,660 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
-2026-04-05 22:55:33,661 | INFO     | apscheduler.scheduler | Added job "refill_tick" to job store "default"
-2026-04-05 22:55:33,662 | INFO     | apscheduler.scheduler | Added job "end_shift" to job store "default"
-2026-04-05 22:55:33,662 | INFO     | apscheduler.scheduler | Scheduler started
-2026-04-05 22:55:33,662 | INFO     | underworld | APScheduler started (tick + shift jobs).
-2026-04-05 22:55:33,672 | INFO     | underworld | ✅  Loaded cog: cogs.buildings
-2026-04-05 22:55:33,674 | INFO     | underworld | ✅  Loaded cog: cogs.crime
-2026-04-05 22:55:33,676 | INFO     | underworld | ✅  Loaded cog: cogs.daily
-2026-04-05 22:55:33,679 | INFO     | underworld | ✅  Loaded cog: cogs.gang
-2026-04-05 22:55:33,681 | INFO     | underworld | ✅  Loaded cog: cogs.help
-2026-04-05 22:55:33,684 | INFO     | underworld | ✅  Loaded cog: cogs.hospital
-2026-04-05 22:55:33,687 | INFO     | underworld | ✅  Loaded cog: cogs.inventory
-2026-04-05 22:55:33,689 | INFO     | underworld | ✅  Loaded cog: cogs.leaderboard
-2026-04-05 22:55:33,694 | INFO     | underworld | ✅  Loaded cog: cogs.market
-2026-04-05 22:55:33,696 | INFO     | underworld | ✅  Loaded cog: cogs.news
-2026-04-05 22:55:33,699 | INFO     | underworld | ✅  Loaded cog: cogs.prison
-2026-04-05 22:55:33,712 | INFO     | underworld | ✅  Loaded cog: cogs.profile
-2026-04-05 22:55:33,724 | INFO     | underworld | ✅  Loaded cog: cogs.pvp
-2026-04-05 22:55:33,729 | INFO     | underworld | ✅  Loaded cog: cogs.referral
-2026-04-05 22:55:33,738 | INFO     | underworld | ✅  Loaded cog: cogs.register
-2026-04-05 22:55:33,742 | INFO     | underworld | ✅  Loaded cog: cogs.shop
-2026-04-05 22:55:33,745 | INFO     | underworld | ✅  Loaded cog: cogs.stats
-2026-04-05 22:55:33,747 | INFO     | underworld | ✅  Loaded cog: cogs.status
-2026-04-05 22:55:33,751 | INFO     | underworld | ✅  Loaded cog: cogs.upgrades
-2026-04-05 22:55:33,753 | INFO     | underworld | ✅  Loaded cog: cogs.vip
-2026-04-05 22:55:33,754 | INFO     | underworld | Cog loader finished: 20 loaded, 0 failed.
-2026-04-05 22:55:34,460 | INFO     | underworld | Synced 30 slash commands.
-2026-04-05 22:55:34,461 | INFO     | underworld | 🏴 Underworld Empire online as Underlord#6139 (ID: 1490257458961190922)
-2026-04-05 22:56:33,682 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 22:57:33 IST)" (scheduled at 2026-04-05 22:56:33.660075+05:30)
-2026-04-05 22:56:33,750 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 22:57:33 IST)" executed successfully
+2026-04-05 23:18:00,268 | WARNING  | discord.client | PyNaCl is not installed, voice will NOT be supported
+2026-04-05 23:18:00,268 | WARNING  | discord.client | davey is not installed, voice will NOT be supported
+[2026-04-05 23:18:00] [WARNING ] discord.ext.commands.bot: Privileged message content intent is missing, commands may not work as expected.
+2026-04-05 23:18:00,271 | WARNING  | discord.ext.commands.bot | Privileged message content intent is missing, commands may not work as expected.
+[2026-04-05 23:18:00] [INFO    ] discord.client: logging in using static token
+2026-04-05 23:18:00,271 | INFO     | discord.client | logging in using static token
+[2026-04-05 23:18:02] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: a5e50fe68c291876d9e757e3fef88c2b).
+2026-04-05 23:18:02,043 | INFO     | discord.gateway | Shard ID None has connected to Gateway (Session ID: a5e50fe68c291876d9e757e3fef88c2b).
+2026-04-05 23:18:04,067 | INFO     | underworld | Connected to MongoDB.
+2026-04-05 23:18:04,075 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-05 23:18:04,076 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-05 23:18:04,077 | INFO     | apscheduler.scheduler | Added job "refill_tick" to job store "default"
+2026-04-05 23:18:04,078 | INFO     | apscheduler.scheduler | Added job "end_shift" to job store "default"
+2026-04-05 23:18:04,078 | INFO     | apscheduler.scheduler | Scheduler started
+2026-04-05 23:18:04,078 | INFO     | underworld | APScheduler started (tick + shift jobs).
+2026-04-05 23:18:04,090 | INFO     | underworld | ✅  Loaded cog: cogs.buildings
+2026-04-05 23:18:04,092 | INFO     | underworld | ✅  Loaded cog: cogs.crime
+2026-04-05 23:18:04,094 | INFO     | underworld | ✅  Loaded cog: cogs.daily
+2026-04-05 23:18:04,097 | INFO     | underworld | ✅  Loaded cog: cogs.gang
+2026-04-05 23:18:04,100 | INFO     | underworld | ✅  Loaded cog: cogs.help
+2026-04-05 23:18:04,103 | INFO     | underworld | ✅  Loaded cog: cogs.hospital
+2026-04-05 23:18:04,107 | INFO     | underworld | ✅  Loaded cog: cogs.inventory
+2026-04-05 23:18:04,110 | INFO     | underworld | ✅  Loaded cog: cogs.leaderboard
+2026-04-05 23:18:04,116 | INFO     | underworld | ✅  Loaded cog: cogs.market
+2026-04-05 23:18:04,119 | INFO     | underworld | ✅  Loaded cog: cogs.news
+2026-04-05 23:18:04,125 | INFO     | underworld | ✅  Loaded cog: cogs.prison
+2026-04-05 23:18:04,129 | INFO     | underworld | ✅  Loaded cog: cogs.profile
+2026-04-05 23:18:04,134 | INFO     | underworld | ✅  Loaded cog: cogs.pvp
+2026-04-05 23:18:04,138 | INFO     | underworld | ✅  Loaded cog: cogs.referral
+2026-04-05 23:18:04,142 | INFO     | underworld | ✅  Loaded cog: cogs.register
+2026-04-05 23:18:04,148 | INFO     | underworld | ✅  Loaded cog: cogs.shop
+2026-04-05 23:18:04,151 | INFO     | underworld | ✅  Loaded cog: cogs.stats
+2026-04-05 23:18:04,154 | INFO     | underworld | ✅  Loaded cog: cogs.status
+2026-04-05 23:18:04,157 | INFO     | underworld | ✅  Loaded cog: cogs.upgrades
+2026-04-05 23:18:04,160 | INFO     | underworld | ✅  Loaded cog: cogs.vip
+2026-04-05 23:18:04,161 | INFO     | underworld | Cog loader finished: 20 loaded, 0 failed.
+2026-04-05 23:18:04,647 | INFO     | underworld | Synced 30 slash commands.
+2026-04-05 23:18:04,648 | INFO     | underworld | 🏴 Underworld Empire online as Underlord#6139 (ID: 1490257458961190922)
+2026-04-05 23:19:04,097 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 23:20:04 IST)" (scheduled at 2026-04-05 23:19:04.075116+05:30)
+2026-04-05 23:19:04,159 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 23:20:04 IST)" executed successfully
+2026-04-05 23:20:04,090 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 23:21:04 IST)" (scheduled at 2026-04-05 23:20:04.075116+05:30)
+2026-04-05 23:20:04,165 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 23:21:04 IST)" executed successfully
+2026-04-05 23:21:04,093 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 23:22:04 IST)" (scheduled at 2026-04-05 23:21:04.075116+05:30)
+2026-04-05 23:21:04,154 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 23:22:04 IST)" executed successfully
+2026-04-05 23:22:04,111 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 23:23:04 IST)" (scheduled at 2026-04-05 23:22:04.075116+05:30)
+2026-04-05 23:22:04,186 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 23:23:04 IST)" executed successfully
+2026-04-05 23:23:04,077 | INFO     | apscheduler.executors.default | Running job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 23:24:04 IST)" (scheduled at 2026-04-05 23:23:04.075116+05:30)
+2026-04-05 23:23:04,139 | INFO     | apscheduler.executors.default | Job "refill_tick (trigger: interval[0:01:00], next run at: 2026-04-05 23:24:04 IST)" executed successfully

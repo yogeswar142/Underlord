@@ -4,6 +4,7 @@
 import asyncio
 import logging
 import os
+import traceback
 from pathlib import Path
 
 import discord
@@ -141,6 +142,76 @@ async def on_ready():
 async def on_command_error(ctx, error):
     """Global error handler for prefix commands (fallback)."""
     log.error(f"Command error: {error}", exc_info=error)
+
+
+# ── Slash Error Handler ───────────────────────────────────────
+LOG_CHANNEL_ID = 1490407083164831796
+
+async def on_tree_error(interaction: discord.Interaction, error: discord.app_commands.AppCommandError):
+    """Global error handler for all slash commands."""
+    # Get the full traceback
+    tb = "".join(traceback.format_exception(type(error), error, error.__traceback__))
+    
+    # Metadata
+    user = interaction.user
+    guild = interaction.guild.name if interaction.guild else "Direct Messages"
+    channel = interaction.channel.name if interaction.guild else "DM"
+    command_name = interaction.command.name if interaction.command else "Unknown Command"
+    
+    # 1. Inform the user
+    error_msg = "❌  **Something went wrong!** An internal error occurred while processing your request. The developers have been notified."
+    try:
+        if not interaction.response.is_done():
+            await interaction.response.send_message(error_msg, ephemeral=True)
+        else:
+            await interaction.followup.send(error_msg, ephemeral=True)
+    except:
+        pass
+
+    # 2. Log to the developer channel
+    log_channel = bot.get_channel(LOG_CHANNEL_ID)
+    if not log_channel:
+        # Fallback if channel not found/cached
+        try:
+            log_channel = await bot.fetch_channel(LOG_CHANNEL_ID)
+        except:
+            log.error(f"Could not find log channel {LOG_CHANNEL_ID}")
+            return
+
+    if log_channel:
+        embed = discord.Embed(
+            title="🧨  System Crash Hooked",
+            color=0xFF0000,
+            timestamp=discord.utils.utcnow()
+        )
+        embed.add_field(name="👤 User", value=f"{user.mention} (`{user.id}`)", inline=True)
+        embed.add_field(name="⚙️ Command", value=f"`/{command_name}`", inline=True)
+        embed.add_field(name="📍 Location", value=f"🏰 **{guild}**\n📺 **#{channel}**", inline=False)
+        
+        # Traceback handle (Discord limit 4096 per embed description)
+        raw_trace = tb
+        if len(raw_trace) < 3900:
+            embed.description = f"```py\n{raw_trace}\n```"
+            await log_channel.send(embed=embed)
+        else:
+            # Chunking logic for massive tracebacks
+            chunks = [raw_trace[i:i+3800] for i in range(0, len(raw_trace), 3800)]
+            embed.description = f"```py\n{chunks[0]}\n```"
+            embed.set_footer(text=f"Part 1 of {len(chunks)}")
+            last_msg = await log_channel.send(embed=embed)
+            
+            for i, chunk in enumerate(chunks[1:], 2):
+                next_embed = discord.Embed(
+                    description=f"```py\n{chunk}\n```",
+                    color=0xFF0000
+                )
+                next_embed.set_footer(text=f"Part {i} of {len(chunks)}")
+                last_msg = await log_channel.send(embed=next_embed, reference=last_msg)
+
+    # 3. Log to console
+    log.error(f"Slash Error in /{command_name}: {error}", exc_info=error)
+
+bot.tree.on_error = on_tree_error
 
 
 # ── Run ───────────────────────────────────────────────────────
