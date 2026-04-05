@@ -7,8 +7,6 @@ import asyncio
 import discord
 from discord import app_commands
 from discord.ext import commands
-from pymongo import UpdateOne
-
 import config
 import db
 import utils
@@ -216,36 +214,14 @@ class UpgradesCog(commands.Cog):
 
             # Async slot rank update (non-blocking)
             asyncio.create_task(
-                self._update_slot_rank(target_item["_id"], target_item["slot"])
+                utils.update_slot_rank(target_item["slot"])
             )
 
         except Exception as e:
             import traceback; traceback.print_exc()
             await self._error(interaction)
 
-    async def _update_slot_rank(self, item_id: str, slot: str):
-        """
-        Rank all items of the same slot by total_bonus descending.
-        Runs asynchronously — does not block the user response.
-        """
-        try:
-            database = db.get_db()
-            items = await database.items.find(
-                {"slot": slot}
-            ).sort("total_bonus", -1).to_list(None)
 
-            ops = []
-            for rank, item in enumerate(items, start=1):
-                ops.append(
-                    UpdateOne(
-                        {"_id": item["_id"]},
-                        {"$set": {"slot_rank": rank}},
-                    )
-                )
-            if ops:
-                await database.items.bulk_write(ops)
-        except Exception:
-            import traceback; traceback.print_exc()
 
     async def _no_faction(self, interaction: discord.Interaction):
         embed = discord.Embed(

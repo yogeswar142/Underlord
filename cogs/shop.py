@@ -161,10 +161,9 @@ async def handle_buy(interaction: discord.Interaction, id_key: str):
         player["items"].append(new_item["_id"])
         await db.save_player(player)
         
-        from cogs.upgrades import update_slot_rank
-        # Fire and forget the async rank update update
+        # Fire and forget the async rank update
         import asyncio
-        asyncio.create_task(update_slot_rank(new_item["slot"]))
+        asyncio.create_task(utils.update_slot_rank(new_item["slot"]))
         
         tier_emoji = TIER_EMOJIS.get(new_item["tier"], "⬜")
         embed = discord.Embed(

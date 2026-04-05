@@ -314,6 +314,120 @@ def cooldown_remaining(timestamp, cooldown_seconds: int) -> float:
 def next_tier(current_tier: str) -> str | None:
     """Return the next tier up, or None if already legendary."""
     idx = config.TIER_ORDER.index(current_tier)
+    idx = config.TIER_ORDER.index(current_tier)
     if idx >= len(config.TIER_ORDER) - 1:
         return None
     return config.TIER_ORDER[idx + 1]
+
+
+# ── Database Raking ───────────────────────────────────────────
+
+async def update_slot_rank(slot: str):
+    """
+    Rank all items of the same slot by total_bonus descending.
+    Async logic to update database rankings.
+    """
+    import db
+    from pymongo import UpdateOne
+    try:
+        database = db.get_db()
+        items = await database.items.find(
+            {"slot": slot}
+        ).sort("total_bonus", -1).to_list(None)
+
+        ops = []
+        for rank, item in enumerate(items, start=1):
+            ops.append(
+                UpdateOne(
+                    {"_id": item["_id"]},
+                    {"$set": {"slot_rank": rank}},
+                )
+            )
+        if ops:
+            await database.items.bulk_write(ops)
+    except Exception:
+        import traceback; traceback.print_exc()
+
+
+# ── Global Error Reporting ────────────────────────────────────
+
+async def report_error(interaction: discord.Interaction, error: Exception):
+    """
+    Global error reporter. Sends detailed tracebacks to the designated log channel.
+    Handles ephemeral feedback to the user and chunking of massive tracebacks.
+    """
+    import traceback
+    import discord
+    import config
+    import logging
+    
+    LOG_CHANNEL_ID = 1490407083164831796
+    log = logging.getLogger("underworld")
+    
+    # 1. Fetch the traceback
+    tb = "".join(traceback.format_exception(type(error), error, error.__traceback__))
+    
+    # 2. Extract metadata
+    user = interaction.user
+    guild = interaction.guild.name if interaction.guild else "Direct Messages"
+    channel = interaction.channel.name if interaction.guild else "DM"
+    
+    # Identify the interaction source
+    source_name = "UI Component / Custom Interaction"
+    if hasattr(interaction, "command") and interaction.command:
+        source_name = f"Command: `/{interaction.command.name}`"
+    elif hasattr(interaction, "data"):
+        custom_id = interaction.data.get("custom_id", "Unknown ID")
+        source_name = f"UI Element: `{custom_id}`"
+
+    # 3. Inform the user epheremally
+    error_msg = "❌  **Something went wrong!** An internal error occurred. Our developers have been notified."
+    try:
+        if not interaction.response.is_done():
+            await interaction.response.send_message(error_msg, ephemeral=True)
+        else:
+            await interaction.followup.send(error_msg, ephemeral=True)
+    except:
+        pass
+
+    # 4. Log to developer channel
+    bot = interaction.client
+    log_channel = bot.get_channel(LOG_CHANNEL_ID)
+    if not log_channel:
+        try:
+            log_channel = await bot.fetch_channel(LOG_CHANNEL_ID)
+        except:
+            log.error(f"Interaction Error in {source_name}: {error}", exc_info=error)
+            return
+
+    if log_channel:
+        embed = discord.Embed(
+            title="🧨  System Exception Hooked",
+            color=0xFF0000,
+            timestamp=discord.utils.utcnow()
+        )
+        embed.add_field(name="🧬 Source", value=source_name, inline=False)
+        embed.add_field(name="👤 User", value=f"{user.mention} (`{user.id}`)", inline=True)
+        embed.add_field(name="📍 Location", value=f"🏰 **{guild}**\n📺 **#{channel}**", inline=True)
+        
+        # Traceback handle (Discord limit 4096 per embed description)
+        if len(tb) < 3800:
+            embed.description = f"```py\n{tb}\n```"
+            await log_channel.send(embed=embed)
+        else:
+            # Chunking logic for massive tracebacks
+            chunks = [tb[i:i+3800] for i in range(0, len(tb), 3800)]
+            embed.description = f"```py\n{chunks[0]}\n```"
+            embed.set_footer(text=f"Part 1 of {len(chunks)}")
+            last_msg = await log_channel.send(embed=embed)
+            
+            for i, chunk in enumerate(chunks[1:], 2):
+                next_embed = discord.Embed(
+                    description=f"```py\n{chunk}\n```",
+                    color=0xFF0000
+                )
+                next_embed.set_footer(text=f"Part {i} of {len(chunks)}")
+                last_msg = await log_channel.send(embed=next_embed, reference=last_msg, mention_author=False)
+
+    # 5. Log to local terminal
+    log.error(f"Global Report: Exception in {source_name}: {error}", exc_info=error)
